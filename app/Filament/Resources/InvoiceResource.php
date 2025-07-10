@@ -47,13 +47,28 @@ class InvoiceResource extends Resource
 
     protected static ?int $navigationSort = 3;
 
+    public static function getNavigationLabel(): string
+    {
+        return __('resources.invoice_resource.navigation_label');
+    }
+
+    public static function getModelLabel(): string
+    {
+        return __('resources.invoice_resource.model_label');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('resources.invoice_resource.plural_model_label');
+    }
+
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 Split::make([
-                    Section::make('Invoice Details')
-                        ->description('Basic invoice information and customer details')
+                    Section::make(__('resources.invoice_resource.invoice_details_section.title'))
+                        ->description(__('resources.invoice_resource.invoice_details_section.description'))
                         ->icon('heroicon-o-document-text')
                         ->schema([
                             Grid::make([
@@ -62,7 +77,7 @@ class InvoiceResource extends Resource
                             ])
                                 ->schema([
                                     Select::make('customer_id')
-                                        ->label('Customer')
+                                        ->label(__('resources.invoice_resource.fields.customer_id'))
                                         ->relationship('customer', 'name')
                                         ->searchable()
                                         ->preload()
@@ -75,7 +90,7 @@ class InvoiceResource extends Resource
                                         ]),
 
                                     Select::make('type')
-                                        ->label('Invoice Type')
+                                        ->label(__('resources.invoice_resource.fields.type'))
                                         ->native(false)
                                         ->options(InvoiceType::class)
                                         ->required()
@@ -84,7 +99,7 @@ class InvoiceResource extends Resource
                                         ->columnSpan(1),
 
                                     TextInput::make('discount')
-                                        ->label('Discount (%)')
+                                        ->label(__('resources.invoice_resource.fields.discount'))
                                         ->numeric()
                                         ->step(0.01)
                                         ->suffix('%')
@@ -93,8 +108,8 @@ class InvoiceResource extends Resource
                                         ->columnSpan(1),
 
                                     Textarea::make('notes')
-                                        ->label('Notes')
-                                        ->placeholder('Additional notes or comments...')
+                                        ->label(__('resources.invoice_resource.fields.notes'))
+                                        ->placeholder(__('resources.invoice_resource.fields.notes_placeholder'))
                                         ->rows(3)
                                         ->columnSpan([
                                             'default' => 1,
@@ -107,12 +122,12 @@ class InvoiceResource extends Resource
                             'lg' => 2,
                         ]),
 
-                    Section::make('Summary')
-                        ->description('Invoice totals and calculations')
+                    Section::make(__('resources.invoice_resource.summary_section.title'))
+                        ->description(__('resources.invoice_resource.summary_section.description'))
                         ->icon('heroicon-o-calculator')
                         ->schema([
                             TextInput::make('total_price')
-                                ->label('Total Amount')
+                                ->label(__('resources.invoice_resource.fields.total_price'))
                                 ->numeric()
                                 ->step(0.01)
                                 ->prefixIcon('heroicon-o-banknotes')
@@ -130,8 +145,8 @@ class InvoiceResource extends Resource
                     ->columnSpanFull()
                     ->from('lg'),
 
-                Section::make('Invoice Items')
-                    ->description('Add products and services to this invoice')
+                Section::make(__('resources.invoice_resource.invoice_items_section.title'))
+                    ->description(__('resources.invoice_resource.invoice_items_section.description'))
                     ->icon('heroicon-o-shopping-cart')
                     ->schema([
                         Repeater::make('items')
@@ -144,7 +159,7 @@ class InvoiceResource extends Resource
                                 ])
                                     ->schema([
                                         Select::make('item_id')
-                                            ->label('Product/Service')
+                                            ->label(__('resources.invoice_resource.fields.item_id'))
 //                                            ->relationship('item', 'name')
                                             ->searchable()
                                             ->preload()
@@ -168,14 +183,14 @@ class InvoiceResource extends Resource
                                             ]),
 
                                         TextInput::make('name')
-                                            ->label('Item Name')
+                                            ->label(__('resources.invoice_resource.fields.name'))
                                             ->required()
                                             ->prefixIcon('heroicon-o-tag')
                                             ->prefixIconColor('gray')
                                             ->columnSpan(1),
 
                                         Select::make('item_type')
-                                            ->label('Type')
+                                            ->label(__('resources.invoice_resource.fields.item_type'))
                                             ->options(InvoiceItemsTypes::class)
                                             ->native(false)
                                             ->required()
@@ -184,7 +199,7 @@ class InvoiceResource extends Resource
                                             ->columnSpan(1),
 
                                         TextInput::make('item_count')
-                                            ->label('Quantity')
+                                            ->label(__('resources.invoice_resource.fields.item_count'))
                                             ->numeric()
                                             ->step(1)
                                             ->default(1)
@@ -195,7 +210,7 @@ class InvoiceResource extends Resource
                                             ->columnSpan(1),
 
                                         TextInput::make('unit_price')
-                                            ->label('Unit Price')
+                                            ->label(__('resources.invoice_resource.fields.unit_price'))
                                             ->numeric()
                                             ->step(0.01)
                                             ->required()
@@ -205,7 +220,7 @@ class InvoiceResource extends Resource
                                             ->columnSpan(1),
 
                                         Select::make('currency_id')
-                                            ->label('Currency')
+                                            ->label(__('resources.invoice_resource.fields.currency_id'))
                                             ->options(fn () => Currency::all()->pluck('code', 'id'))
                                             ->native(false)
                                             ->required()
@@ -214,7 +229,7 @@ class InvoiceResource extends Resource
                                             ->columnSpan(1),
 
                                         TextInput::make('weight')
-                                            ->label('Weight (kg)')
+                                            ->label(__('resources.invoice_resource.fields.weight'))
                                             ->numeric()
                                             ->step(0.01)
                                             ->prefixIcon('heroicon-o-scale')
@@ -222,7 +237,7 @@ class InvoiceResource extends Resource
                                             ->columnSpan(1),
 
                                         Textarea::make('description')
-                                            ->label('Description')
+                                            ->label(__('resources.invoice_resource.fields.description'))
                                             ->rows(2)
                                             ->columnSpan([
                                                 'default' => 1,
@@ -231,8 +246,8 @@ class InvoiceResource extends Resource
                                             ]),
                                     ]),
                             ])
-                            ->itemLabel(fn (array $state): ?string => $state['name'] ?? 'New Item')
-                            ->addActionLabel('Add Invoice Item')
+                            ->itemLabel(fn (array $state): ?string => $state['name'] ?? __('resources.invoice_resource.repeater.item_label'))
+                            ->addActionLabel(__('resources.invoice_resource.repeater.add_action_label'))
                             ->reorderableWithButtons()
                             ->collapsible()
                             ->cloneable()
@@ -256,7 +271,7 @@ class InvoiceResource extends Resource
                 LayoutSplit::make([
                     Stack::make([
                         TextColumn::make('customer.name')
-                            ->label('Customer')
+                            ->label(__('resources.invoice_resource.table.customer'))
                             ->weight(FontWeight::Bold)
                             ->searchable()
                             ->sortable()
@@ -265,7 +280,7 @@ class InvoiceResource extends Resource
                             ->grow(false),
 
                         TextColumn::make('type')
-                            ->label('Type')
+                            ->label(__('resources.invoice_resource.table.type'))
                             ->badge()
                             ->color(fn (string $state): string => match ($state) {
                                 'sale' => 'success',
@@ -283,7 +298,7 @@ class InvoiceResource extends Resource
 
                     Stack::make([
                         TextColumn::make('total_price')
-                            ->label('Total')
+                            ->label(__('resources.invoice_resource.table.total'))
                             ->money('USD') // You might want to make this dynamic based on invoice currency
                             ->weight(FontWeight::Bold)
                             ->icon('heroicon-o-banknotes')
@@ -291,7 +306,7 @@ class InvoiceResource extends Resource
                             ->grow(false),
 
                         TextColumn::make('discount')
-                            ->label('Discount')
+                            ->label(__('resources.invoice_resource.table.discount'))
                             ->suffix('%')
                             ->badge()
                             ->color('warning')
@@ -304,7 +319,7 @@ class InvoiceResource extends Resource
 
                     Stack::make([
                         TextColumn::make('items_count')
-                            ->label('Items')
+                            ->label(__('resources.invoice_resource.table.items_count'))
                             ->counts('items')
                             ->badge()
                             ->color('info')
@@ -312,7 +327,7 @@ class InvoiceResource extends Resource
                             ->grow(false),
 
                         TextColumn::make('created_at')
-                            ->label('Created')
+                            ->label(__('resources.invoice_resource.table.created'))
                             ->dateTime('M j, Y')
                             ->color('gray')
                             ->size('sm')
@@ -334,13 +349,13 @@ class InvoiceResource extends Resource
             ->actions([
                 ViewAction::make()
                     ->iconButton()
-                    ->tooltip('View Invoice'),
+                    ->tooltip(__('resources.invoice_resource.actions.view')),
                 EditAction::make()
                     ->iconButton()
-                    ->tooltip('Edit Invoice'),
+                    ->tooltip(__('resources.invoice_resource.actions.edit')),
                 DeleteAction::make()
                     ->iconButton()
-                    ->tooltip('Delete Invoice')
+                    ->tooltip(__('resources.invoice_resource.actions.delete'))
                     ->requiresConfirmation(),
             ])
             ->bulkActions([
