@@ -13,7 +13,10 @@ class ListCurrencies extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            CreateAction::make(),
+            CreateAction::make()
+                ->icon('heroicon-o-plus')
+                ->label('Add New Currency')
+                ->color('primary'),
         ];
     }
 }
