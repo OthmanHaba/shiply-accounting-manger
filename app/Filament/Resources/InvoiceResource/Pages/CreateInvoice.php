@@ -28,29 +28,11 @@ class CreateInvoice extends CreateRecord
             ->iconColor('success');
     }
 
-    private function calculateCurrencyTotalsFromItems(array $items): array
-    {
-        $currencyTotals = [];
-
-        foreach ($items as $item) {
-            $currencyId = $item['currency_id'] ?? null;
-            $totalPrice = $item['total_price'] ?? 0;
-
-            if ($currencyId && $totalPrice) {
-                if (! isset($currencyTotals[$currencyId])) {
-                    $currencyTotals[$currencyId] = 0;
-                }
-                $currencyTotals[$currencyId] += floatval($totalPrice);
-            }
-        }
-
-        return $currencyTotals;
-    }
-
     protected function handleRecordCreation(array $data): Model
     {
         // Create the invoice
         $invoice = static::getModel()::create([
+            'code' => $data['code'],
             'customer_id' => $data['customer_id'],
             'type' => $data['type'],
             'note' => $data['notes'],
@@ -70,10 +52,8 @@ class CreateInvoice extends CreateRecord
             ]);
         }
 
-        // Create invoice prices
         if (isset($data['prices'])) {
             foreach ($data['prices'] as $currencyId => $price) {
-                // Remove any formatting (commas, etc.) and convert to float
                 $cleanPrice = (float) str_replace(',', '', $price);
                 if ($cleanPrice > 0) {
                     $invoice->invoicePrices()->create([

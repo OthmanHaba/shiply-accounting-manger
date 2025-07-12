@@ -14,7 +14,8 @@ return new class extends Migration
             $table->string('code');
             $table->foreignIdFor(Customer::class)
                 ->constrained();
-            $table->string('note');
+            $table->string('note')
+                ->nullable();
             $table->string('type');
             $table->decimal('discount')
                 ->nullable();

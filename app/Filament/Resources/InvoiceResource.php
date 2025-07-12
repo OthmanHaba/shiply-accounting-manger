@@ -31,6 +31,7 @@ use Filament\Tables\Columns\Layout\Split as LayoutSplit;
 use Filament\Tables\Columns\Layout\Stack;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use NunoMaduro\Collision\Adapters\Phpunit\State;
 
 class InvoiceResource extends Resource
 {
@@ -78,16 +79,14 @@ class InvoiceResource extends Resource
                             ->schema([
                                 TextInput::make('code')
                                     ->label(__('resources.invoice_resource.fields.code'))
-                                    ->placeholder('e.g. INV-001')
-                                    ->afterStateHydrated(function (Set $set) {
-                                        $code = Invoice::latest()->first()->code;
+                                    ->default(function (TextInput $component, Set $set) {
+                                        $code = Invoice::latest()->first()?->code;
                                         if (is_null($code)) {
                                             return 'INV-001';
                                         }
 
                                         $set('code', 'INV-'.(int) $code + 1);
                                     })
-                                    ->disabled()
                                     ->prefixIcon('heroicon-o-hashtag')
                                     ->prefixIconColor('gray')
                                     ->required()
@@ -396,15 +395,22 @@ class InvoiceResource extends Resource
                     ])
                         ->space(1),
 
-                    Stack::make([
-                        TextColumn::make('total_price')
-                            ->label(__('resources.invoice_resource.table.total'))
-                            ->money('USD') // You might want to make this dynamic based on invoice currency
-                            ->weight(FontWeight::Bold)
-                            ->icon('heroicon-o-banknotes')
-                            ->iconColor('success')
-                            ->grow(false),
-                    ])
+                    Stack::make(
+                        collect(Currency::all())->map(function ($currency) {
+                            return TextColumn::make('invoice_prices_'.$currency->code)
+                                ->label($currency->code)
+                                ->badge()
+                                ->color(fn ($state) => $state > 0 ? 'success' : ($state < 0 ? 'danger' : 'gray'))
+                                ->state(function (Invoice $record) use ($currency) {
+                                    $balance = $record->invoicePrices()
+                                        ->where('currency_id', $currency->id)
+                                        ->first()?->total_price ?? 0;
+
+                                    return number_format($balance, 2).' '.$currency->code;
+                                })
+                                ->grow(false);
+                        })->toArray()
+                    )
                         ->space(1)
                         ->visibleFrom('md'),
 
