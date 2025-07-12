@@ -3,8 +3,11 @@
 namespace App\Filament\Resources\InvoiceResource\Pages;
 
 use App\Filament\Resources\InvoiceResource;
+use App\Models\Invoice;
+use App\Models\InvoicePrice;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\CreateRecord;
+use Illuminate\Database\Eloquent\Model;
 
 class CreateInvoice extends CreateRecord
 {
@@ -25,44 +28,90 @@ class CreateInvoice extends CreateRecord
             ->iconColor('success');
     }
 
-    protected function mutateFormDataBeforeCreate(array $data): array
+    private function calculateCurrencyTotalsFromItems(array $items): array
     {
-        // Calculate total price from items
-        $totalPrice = 0;
+        $currencyTotals = [];
 
-        if (isset($data['items']) && is_array($data['items'])) {
-            foreach ($data['items'] as $item) {
-                if (isset($item['unit_price']) && isset($item['item_count'])) {
-                    $totalPrice += (float) $item['unit_price'] * (int) $item['item_count'];
+        foreach ($items as $item) {
+            $currencyId = $item['currency_id'] ?? null;
+            $totalPrice = $item['total_price'] ?? 0;
+
+            if ($currencyId && $totalPrice) {
+                if (! isset($currencyTotals[$currencyId])) {
+                    $currencyTotals[$currencyId] = 0;
+                }
+                $currencyTotals[$currencyId] += floatval($totalPrice);
+            }
+        }
+
+        return $currencyTotals;
+    }
+
+    protected function handleRecordCreation(array $data): Model
+    {
+        // Create the invoice
+        $invoice = static::getModel()::create([
+            'customer_id' => $data['customer_id'],
+            'type' => $data['type'],
+            'note' => $data['notes'],
+        ]);
+
+        // Create invoice items
+        foreach ($data['items'] as $itemData) {
+            $invoice->items()->create([
+                'item_id' => $itemData['item_id'],
+                'item_type' => $itemData['item_type'],
+                'item_count' => $itemData['item_count'],
+                'unit_price' => $itemData['unit_price'],
+                'currency_id' => $itemData['currency_id'],
+                'weight' => $itemData['weight'],
+                'total_price' => $itemData['total_price'],
+                'description' => $itemData['description'],
+            ]);
+        }
+
+        // Create invoice prices
+        if (isset($data['prices'])) {
+            foreach ($data['prices'] as $currencyId => $price) {
+                // Remove any formatting (commas, etc.) and convert to float
+                $cleanPrice = (float) str_replace(',', '', $price);
+                if ($cleanPrice > 0) {
+                    $invoice->invoicePrices()->create([
+                        'currency_id' => $currencyId,
+                        'total_price' => $cleanPrice,
+                    ]);
                 }
             }
         }
 
-        // Apply discount if provided
-        if (isset($data['discount']) && $data['discount'] > 0) {
-            $discountAmount = ($totalPrice * (float) $data['discount']) / 100;
-            $totalPrice -= $discountAmount;
-        }
-
-        $data['total_price'] = round($totalPrice, 2);
-
-        return $data;
+        return $invoice;
     }
 
     protected function afterCreate(): void
     {
-        $invoice = $this->record;
-        $itemsCount = $invoice->items()->count();
+        /**
+         * @var Invoice $invoice
+         */
+        $invoice = $this->getRecord();
 
-        // Send additional notification about items
-        if ($itemsCount > 0) {
+        /**
+         * @var InvoicePrice[] $prices
+         */
+        $prices = $invoice->invoicePrices()->get();
+        $customer = $invoice->customer;
+        foreach ($prices as $price) {
+            $customer->accounts()
+                ->where('currency_id', $price->currency_id)
+                ->first()
+                ->withdraw($price->total_price);
+
             Notification::make()
-                ->info()
-                ->title('Invoice items added')
-                ->body("Added {$itemsCount} items to the invoice.")
-                ->icon('heroicon-o-shopping-cart')
-                ->iconColor('info')
-                ->send();
+                ->success()
+                ->title('withdrawal successful')
+                ->body('Customer Account Has been withdrawn by this amount'.$price->total_price)
+                ->icon('heroicon-o-check-circle')
+                ->iconColor('success');
         }
+
     }
 }

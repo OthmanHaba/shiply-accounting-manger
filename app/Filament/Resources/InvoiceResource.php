@@ -6,13 +6,14 @@ use App\Enums\InvoiceItemsTypes;
 use App\Enums\InvoiceType;
 use App\Filament\Resources\InvoiceResource\Pages;
 use App\Models\Currency;
+use App\Models\Customer;
 use App\Models\Invoice;
 use App\Models\Item;
+use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Split;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
@@ -66,91 +67,116 @@ class InvoiceResource extends Resource
     {
         return $form
             ->schema([
-                Split::make([
-                    Section::make(__('resources.invoice_resource.invoice_details_section.title'))
-                        ->description(__('resources.invoice_resource.invoice_details_section.description'))
-                        ->icon('heroicon-o-document-text')
-                        ->schema([
-                            Grid::make([
-                                'default' => 1,
-                                'md' => 2,
-                            ])
-                                ->schema([
-                                    Select::make('customer_id')
-                                        ->label(__('resources.invoice_resource.fields.customer_id'))
-                                        ->relationship('customer', 'name')
-                                        ->searchable()
-                                        ->preload()
-                                        ->required()
-                                        ->prefixIcon('heroicon-o-user')
-                                        ->prefixIconColor('primary')
-                                        ->columnSpan([
-                                            'default' => 1,
-                                            'md' => 2,
-                                        ]),
-
-                                    Select::make('type')
-                                        ->label(__('resources.invoice_resource.fields.type'))
-                                        ->native(false)
-                                        ->options(InvoiceType::class)
-                                        ->required()
-                                        ->prefixIcon('heroicon-o-tag')
-                                        ->prefixIconColor('info')
-                                        ->columnSpan(1),
-
-                                    TextInput::make('discount')
-                                        ->label(__('resources.invoice_resource.fields.discount'))
-                                        ->numeric()
-                                        ->step(0.01)
-                                        ->suffix('%')
-                                        ->prefixIcon('heroicon-o-receipt-percent')
-                                        ->prefixIconColor('warning')
-                                        ->columnSpan(1),
-
-                                    Textarea::make('notes')
-                                        ->label(__('resources.invoice_resource.fields.notes'))
-                                        ->placeholder(__('resources.invoice_resource.fields.notes_placeholder'))
-                                        ->rows(3)
-                                        ->columnSpan([
-                                            'default' => 1,
-                                            'md' => 2,
-                                        ]),
-                                ]),
+                Section::make(__('resources.invoice_resource.invoice_details_section.title'))
+                    ->description(__('resources.invoice_resource.invoice_details_section.description'))
+                    ->icon('heroicon-o-document-text')
+                    ->schema([
+                        Grid::make([
+                            'default' => 1,
+                            'md' => 2,
                         ])
-                        ->columnSpan([
-                            'default' => 'full',
-                            'lg' => 2,
-                        ]),
+                            ->schema([
+                                TextInput::make('code')
+                                    ->label(__('resources.invoice_resource.fields.code'))
+                                    ->placeholder('e.g. INV-001')
+                                    ->afterStateHydrated(function (Set $set) {
+                                        $code = Invoice::latest()->first()->code;
+                                        if (is_null($code)) {
+                                            return 'INV-001';
+                                        }
 
-                    Section::make(__('resources.invoice_resource.summary_section.title'))
-                        ->description(__('resources.invoice_resource.summary_section.description'))
-                        ->icon('heroicon-o-calculator')
-                        ->schema([
-                            TextInput::make('total_price')
-                                ->label(__('resources.invoice_resource.fields.total_price'))
-                                ->numeric()
-                                ->step(0.01)
-                                ->prefixIcon('heroicon-o-banknotes')
-                                ->prefixIconColor('success')
-                                ->disabled()
-                                ->dehydrated(false),
-                        ])
-                        ->columnSpan([
-                            'default' => 'full',
-                            'lg' => 1,
-                        ])
-                        ->compact()
-                        ->aside(),
-                ])
-                    ->columnSpanFull()
-                    ->from('lg'),
+                                        $set('code', 'INV-'.(int) $code + 1);
+                                    })
+                                    ->disabled()
+                                    ->prefixIcon('heroicon-o-hashtag')
+                                    ->prefixIconColor('gray')
+                                    ->required()
+                                    ->maxLength(255)
+                                    ->unique(ignoreRecord: true),
+
+                                Select::make('customer_id')
+                                    ->label(__('resources.invoice_resource.fields.customer_id'))
+                                    ->relationship('customer', 'name')
+                                    ->searchable()
+                                    ->preload()
+                                    ->createOptionForm(
+                                        [
+                                            Grid::make([
+                                                'default' => 1,
+                                                'md' => 2,
+                                            ])
+                                                ->schema([
+                                                    TextInput::make('name')
+                                                        ->label('Full Name')
+                                                        ->placeholder('Enter customer full name')
+                                                        ->prefixIcon('heroicon-o-user')
+                                                        ->prefixIconColor('primary')
+                                                        ->required()
+                                                        ->maxLength(255)
+                                                        ->columnSpan([
+                                                            'default' => 1,
+                                                            'md' => 2,
+                                                        ]),
+
+                                                    TextInput::make('code')
+                                                        ->label('Customer Code')
+                                                        ->placeholder('e.g. CUST-001')
+                                                        ->prefixIcon('heroicon-o-hashtag')
+                                                        ->prefixIconColor('gray')
+                                                        ->required()
+                                                        ->maxLength(255)
+                                                        ->unique(ignoreRecord: true)
+                                                        ->columnSpan(1),
+
+                                                    TextInput::make('phone')
+                                                        ->label('Phone Number')
+                                                        ->placeholder('e.g. +1 (555) 123-4567')
+                                                        ->prefixIcon('heroicon-o-phone')
+                                                        ->prefixIconColor('success')
+                                                        ->tel()
+                                                        ->required()
+                                                        ->maxLength(255)
+                                                        ->unique(ignoreRecord: true)
+                                                        ->columnSpan(1),
+                                                ]),
+                                        ]
+                                    )
+                                    ->createOptionUsing(function (array $data) {
+                                        Customer::create($data);
+                                    })
+                                    ->required()
+                                    ->prefixIcon('heroicon-o-user')
+                                    ->prefixIconColor('primary'),
+
+                                Select::make('type')
+                                    ->label(__('resources.invoice_resource.fields.type'))
+                                    ->native(false)
+                                    ->options(InvoiceType::class)
+                                    ->required()
+                                    ->prefixIcon('heroicon-o-tag')
+                                    ->prefixIconColor('info')
+                                    ->columnSpan(1),
+
+                                Textarea::make('notes')
+                                    ->label(__('resources.invoice_resource.fields.notes'))
+                                    ->placeholder(__('resources.invoice_resource.fields.notes_placeholder'))
+                                    ->rows(3)
+                                    ->columnSpan([
+                                        'default' => 1,
+                                        'md' => 2,
+                                    ]),
+                            ]),
+                    ])
+                    ->columnSpan([
+                        'default' => 'full',
+                        'lg' => 2,
+                    ]),
 
                 Section::make(__('resources.invoice_resource.invoice_items_section.title'))
                     ->description(__('resources.invoice_resource.invoice_items_section.description'))
                     ->icon('heroicon-o-shopping-cart')
                     ->schema([
                         Repeater::make('items')
-//                            ->relationship()
                             ->schema([
                                 Grid::make([
                                     'default' => 1,
@@ -160,34 +186,29 @@ class InvoiceResource extends Resource
                                     ->schema([
                                         Select::make('item_id')
                                             ->label(__('resources.invoice_resource.fields.item_id'))
-//                                            ->relationship('item', 'name')
                                             ->searchable()
+                                            ->relationship('item', 'name')
                                             ->preload()
+                                            ->required()
                                             ->prefixIcon('heroicon-o-cube')
                                             ->prefixIconColor('primary')
-                                            ->live()
-                                            ->afterStateUpdated(function (Get $get, Set $set, $state) {
-                                                if ($state) {
-                                                    $item = Item::find($state);
-                                                    if ($item) {
-                                                        $set('name', $item->name);
-                                                        $set('description', $item->description ?? '');
-                                                        $set('unit_price', $item->price ?? 0);
-                                                    }
-                                                }
+                                            ->createOptionForm([
+                                                TextInput::make('name')
+                                                    ->label(__('resources.invoice_resource.fields.name'))
+                                                    ->required()
+                                                    ->maxLength(255),
+                                            ])
+                                            ->createOptionUsing(function (array $data) {
+                                                Item::create([
+                                                    'name' => $data['name'],
+                                                ]);
                                             })
+                                            ->live()
                                             ->columnSpan([
                                                 'default' => 1,
                                                 'md' => 2,
                                                 'lg' => 1,
                                             ]),
-
-                                        TextInput::make('name')
-                                            ->label(__('resources.invoice_resource.fields.name'))
-                                            ->required()
-                                            ->prefixIcon('heroicon-o-tag')
-                                            ->prefixIconColor('gray')
-                                            ->columnSpan(1),
 
                                         Select::make('item_type')
                                             ->label(__('resources.invoice_resource.fields.item_type'))
@@ -202,6 +223,10 @@ class InvoiceResource extends Resource
                                             ->label(__('resources.invoice_resource.fields.item_count'))
                                             ->numeric()
                                             ->step(1)
+                                            ->afterStateUpdated(function (Set $set, Get $get) {
+                                                self::calculateItemPrice($set, $get);
+                                                self::calculateCurrencyTotals($set, $get);
+                                            })
                                             ->default(1)
                                             ->required()
                                             ->prefixIcon('heroicon-o-hashtag')
@@ -213,6 +238,10 @@ class InvoiceResource extends Resource
                                             ->label(__('resources.invoice_resource.fields.unit_price'))
                                             ->numeric()
                                             ->step(0.01)
+                                            ->afterStateUpdated(function (Set $set, Get $get) {
+                                                self::calculateItemPrice($set, $get);
+                                                self::calculateCurrencyTotals($set, $get);
+                                            })
                                             ->required()
                                             ->prefixIcon('heroicon-o-banknotes')
                                             ->prefixIconColor('success')
@@ -226,15 +255,53 @@ class InvoiceResource extends Resource
                                             ->required()
                                             ->prefixIcon('heroicon-o-currency-dollar')
                                             ->prefixIconColor('primary')
+                                            ->afterStateUpdated(function (Set $set, Get $get) {
+                                                self::calculateCurrencyTotals($set, $get);
+                                            })
+                                            ->live()
                                             ->columnSpan(1),
 
                                         TextInput::make('weight')
                                             ->label(__('resources.invoice_resource.fields.weight'))
                                             ->numeric()
+                                            ->afterStateUpdated(function (Set $set, Get $get) {
+                                                self::calculateItemPrice($set, $get);
+                                                self::calculateCurrencyTotals($set, $get);
+                                            })
                                             ->step(0.01)
                                             ->prefixIcon('heroicon-o-scale')
                                             ->prefixIconColor('gray')
+                                            ->live()
                                             ->columnSpan(1),
+
+                                        TextInput::make('total_price')
+                                            ->label(__('resources.invoice_resource.fields.total_price'))
+                                            ->prefixIcon('heroicon-o-hashtag')
+                                            ->prefixIconColor('primary')
+                                            ->required()
+                                            ->disabled(fn (Get $get) => ! $get('manual_edit_price'))
+                                            ->dehydrated()
+                                            ->afterStateUpdated(function (Set $set, Get $get) {
+                                                self::calculateCurrencyTotals($set, $get);
+                                            })
+                                            ->live()
+                                            ->maxLength(255)
+                                            ->suffixAction(
+                                                Action::make('edit_price')
+                                                    ->icon('heroicon-o-pencil')
+                                                    ->tooltip('Edit price manually')
+                                                    ->action(function (Set $set, Get $get, $state) {
+                                                        // Enable the field for editing
+                                                        $targetValue = $get('manual_edit_price');
+                                                        $set('manual_edit_price', ! $targetValue);
+                                                    })
+                                            ),
+
+                                        // Hidden field to track manual edit state
+                                        TextInput::make('manual_edit_price')
+                                            ->hidden()
+                                            ->default(false)
+                                            ->dehydrated(false),
 
                                         Textarea::make('description')
                                             ->label(__('resources.invoice_resource.fields.description'))
@@ -254,14 +321,55 @@ class InvoiceResource extends Resource
                             ->deleteAction(
                                 fn ($action) => $action->requiresConfirmation()
                             )
+                            ->afterStateUpdated(function (Set $set, Get $get) {
+                                self::calculateCurrencyTotals($set, $get);
+                            })
+                            ->live()
                             ->defaultItems(1),
                     ])
                     ->columnSpanFull(),
-            ])
-            ->columns([
-                'default' => 1,
-                'lg' => 3,
+
+                Section::make(__('resources.invoice_resource.summary_section.title'))
+                    ->description(__('resources.invoice_resource.summary_section.description'))
+                    ->icon('heroicon-o-calculator')
+                    ->schema([
+                        // Auto-calculated currency totals
+                        ...collect(Currency::all())->map(function ($currency) {
+                            return TextInput::make("prices.{$currency->id}")
+                                ->label($currency->name.' ('.$currency->code.')')
+                                ->prefixIcon('heroicon-o-currency-dollar')
+                                ->prefixIconColor('primary')
+                                ->disabled(fn (Get $get) => ! $get("manual_edit_currency_{$currency->id}"))
+                                ->dehydrated()
+                                ->live()
+                                ->suffixAction(
+                                    Action::make("edit_currency_{$currency->id}")
+                                        ->icon('heroicon-o-pencil')
+                                        ->tooltip('Edit total manually')
+                                        ->action(function (Set $set, Get $get, $state) use ($currency) {
+                                            $target = "manual_edit_currency_{$currency->id}";
+                                            $targetValue = $get($target);
+                                            $set("manual_edit_currency_{$currency->id}", ! $targetValue);
+                                        })
+                                );
+                        })->toArray(),
+
+                        // Hidden fields to track manual edit state for currencies
+                        ...collect(Currency::all())->map(function ($currency) {
+                            return TextInput::make("manual_edit_currency_{$currency->id}")
+                                ->hidden()
+                                ->default(false)
+                                ->dehydrated(false);
+                        })->toArray(),
+                    ])
+                    ->columnSpan([
+                        'default' => 'full',
+                        'lg' => 1,
+                    ])
+                    ->compact(),
+
             ]);
+
     }
 
     public static function table(Table $table): Table
@@ -282,14 +390,6 @@ class InvoiceResource extends Resource
                         TextColumn::make('type')
                             ->label(__('resources.invoice_resource.table.type'))
                             ->badge()
-                            ->color(fn (string $state): string => match ($state) {
-                                'sale' => 'success',
-                                'purchase' => 'info',
-                                'service' => 'warning',
-                                'credit' => 'danger',
-                                'debit' => 'gray',
-                                default => 'primary',
-                            })
                             ->icon('heroicon-o-tag')
                             ->iconPosition(IconPosition::Before)
                             ->grow(false),
@@ -303,15 +403,6 @@ class InvoiceResource extends Resource
                             ->weight(FontWeight::Bold)
                             ->icon('heroicon-o-banknotes')
                             ->iconColor('success')
-                            ->grow(false),
-
-                        TextColumn::make('discount')
-                            ->label(__('resources.invoice_resource.table.discount'))
-                            ->suffix('%')
-                            ->badge()
-                            ->color('warning')
-                            ->icon('heroicon-o-receipt-percent')
-                            ->placeholder('—')
                             ->grow(false),
                     ])
                         ->space(1)
@@ -393,5 +484,54 @@ class InvoiceResource extends Resource
         $count = static::getModel()::count();
 
         return $count > 50 ? 'success' : ($count > 20 ? 'warning' : 'primary');
+    }
+
+    public static function calculateItemPrice(Set $set, Get $get): void
+    {
+        // Check if price is manually edited
+        $isManuallyEdited = $get('manual_edit_price');
+
+        // Only calculate if not manually edited
+        if (! $isManuallyEdited) {
+            $unitPrice = $get('unit_price');
+            $weight = $get('weight');
+            $itemCount = $get('item_count');
+
+            if (! empty($unitPrice) && ! empty($weight) && ! empty($itemCount)) {
+                $set('total_price', $unitPrice * $weight * $itemCount);
+            }
+        }
+    }
+
+    public static function calculateCurrencyTotals(Set $set, Get $get): void
+    {
+        // Get all items from the form
+        $items = $get('../../items') ?? [];
+
+        // Group items by currency and calculate totals
+        $currencyTotals = [];
+
+        foreach ($items as $item) {
+            $currencyId = $item['currency_id'] ?? null;
+            $totalPrice = $item['total_price'] ?? 0;
+
+            if ($currencyId && $totalPrice) {
+                if (! isset($currencyTotals[$currencyId])) {
+                    $currencyTotals[$currencyId] = 0;
+                }
+                $currencyTotals[$currencyId] += floatval($totalPrice);
+            }
+        }
+
+        // Set the currency totals in the form, but only if not manually edited
+        foreach (Currency::all() as $currency) {
+            $isManuallyEdited = $get("../../manual_edit_currency_{$currency->id}");
+
+            // Only update if not manually edited
+            if (! $isManuallyEdited) {
+                $total = $currencyTotals[$currency->id] ?? 0;
+                $set("../../prices.{$currency->id}", number_format($total, 2));
+            }
+        }
     }
 }

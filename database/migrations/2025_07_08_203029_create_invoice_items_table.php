@@ -15,14 +15,16 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(Item::class)
                 ->constrained();
-            $table->string('description');
-            $table->decimal('weight');
+            $table->string('description')
+                ->nullable();
+            $table->decimal('weight', 8, 3)->nullable();
             $table->string('item_type');
             $table->integer('item_count');
             $table->foreignIdFor(Currency::class)
                 ->constrained();
             $table->foreignIdFor(Invoice::class)->constrained();
-            $table->decimal('unit_price');
+            $table->decimal('unit_price', 10, 2);
+            $table->decimal('total_price', 10, 2)->nullable();
             $table->timestamps();
         });
     }

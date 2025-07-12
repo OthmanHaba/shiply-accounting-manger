@@ -16,7 +16,6 @@ return new class extends Migration
                 ->constrained();
             $table->string('note');
             $table->string('type');
-            $table->decimal('total_price');
             $table->decimal('discount')
                 ->nullable();
             $table->timestamps();

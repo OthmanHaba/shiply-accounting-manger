@@ -25,4 +25,12 @@ class Account extends Model
     {
         return $this->belongsTo(Currency::class);
     }
+
+    public function withdraw($amount): static
+    {
+        $this->amount = $this->amount - $amount;
+        $this->save();
+
+        return $this;
+    }
 }

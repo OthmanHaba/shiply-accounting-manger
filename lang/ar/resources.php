@@ -25,6 +25,7 @@ return [
 
         // Form Fields
         'fields' => [
+            'code' => 'رقم الفاتورة',
             'customer_id' => 'العميل',
             'type' => 'نوع الفاتورة',
             'discount' => 'الخصم (%)',
