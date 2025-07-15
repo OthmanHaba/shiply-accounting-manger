@@ -11,6 +11,7 @@ use Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
+use Filament\Support\Enums\MaxWidth;
 use Filament\Widgets;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
@@ -35,6 +36,7 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            ->maxContentWidth(MaxWidth::Full)
             ->colors([
                 'primary' => Color::Green,
             ])
@@ -45,6 +47,11 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
+                \App\Filament\Widgets\StatsOverviewWidget::class,
+                \App\Filament\Widgets\RevenueChartWidget::class,
+                \App\Filament\Widgets\ReceiptsChartWidget::class,
+                \App\Filament\Widgets\RecentInvoicesWidget::class,
+                \App\Filament\Widgets\TreasuryBalanceWidget::class,
                 Widgets\AccountWidget::class,
                 Widgets\FilamentInfoWidget::class,
             ])
