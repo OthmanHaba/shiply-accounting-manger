@@ -24,6 +24,11 @@ class Invoice extends Model
         'items',
     ];
 
+    public function respects(): BelongsToMany
+    {
+        return $this->belongsToMany(Receipt::class, 'respect_invoice', 'invoice_id', 'respect_id');
+    }
+
     protected function casts(): array
     {
         return [
