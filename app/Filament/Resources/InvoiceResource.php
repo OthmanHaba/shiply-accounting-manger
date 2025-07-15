@@ -150,6 +150,7 @@ class InvoiceResource extends Resource
                                 Select::make('type')
                                     ->label(__('resources.invoice_resource.fields.type'))
                                     ->native(false)
+                                    ->reactive()
                                     ->options(InvoiceType::class)
                                     ->required()
                                     ->prefixIcon('heroicon-o-tag')
@@ -174,6 +175,7 @@ class InvoiceResource extends Resource
                 Section::make(__('resources.invoice_resource.invoice_items_section.title'))
                     ->description(__('resources.invoice_resource.invoice_items_section.description'))
                     ->icon('heroicon-o-shopping-cart')
+                    ->visible(fn (Get $get) => $get('type') === InvoiceType::Shared->value)
                     ->schema([
                         Repeater::make('items')
                             ->schema([

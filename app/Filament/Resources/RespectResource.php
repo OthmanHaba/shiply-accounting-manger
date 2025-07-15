@@ -2,8 +2,9 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\ItemResource\Pages;
-use App\Models\Item;
+use App\Filament\Resources\RespectResource\Pages;
+use App\Models\Respect;
+use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -14,20 +15,30 @@ use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
-class ItemResource extends Resource
+class RespectResource extends Resource
 {
-    protected static ?string $model = Item::class;
+    protected static ?string $model = Respect::class;
 
-    protected static ?string $slug = 'items';
+    protected static ?string $slug = 'respects';
 
-    protected static ?string $navigationIcon = 'heroicon-o-cube';
+    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                TextInput::make('name')
+                TextInput::make('note'),
+
+                TextInput::make('amount')
                     ->required(),
+
+                Placeholder::make('created_at')
+                    ->label('Created Date')
+                    ->content(fn (?Respect $record): string => $record?->created_at?->diffForHumans() ?? '-'),
+
+                Placeholder::make('updated_at')
+                    ->label('Last Modified Date')
+                    ->content(fn (?Respect $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
             ]);
     }
 
@@ -35,9 +46,9 @@ class ItemResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('name')
-                    ->searchable()
-                    ->sortable(),
+                TextColumn::make('note'),
+
+                TextColumn::make('amount'),
             ])
             ->filters([
                 //
@@ -56,14 +67,14 @@ class ItemResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListItems::route('/'),
-            'create' => Pages\CreateItem::route('/create'),
-            'edit' => Pages\EditItem::route('/{record}/edit'),
+            'index' => Pages\ListRespects::route('/'),
+            'create' => Pages\CreateRespect::route('/create'),
+            'edit' => Pages\EditRespect::route('/{record}/edit'),
         ];
     }
 
     public static function getGloballySearchableAttributes(): array
     {
-        return ['name'];
+        return [];
     }
 }

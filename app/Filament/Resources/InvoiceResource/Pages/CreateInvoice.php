@@ -39,17 +39,19 @@ class CreateInvoice extends CreateRecord
         ]);
 
         // Create invoice items
-        foreach ($data['items'] as $itemData) {
-            $invoice->items()->create([
-                'item_id' => $itemData['item_id'],
-                'item_type' => $itemData['item_type'],
-                'item_count' => $itemData['item_count'],
-                'unit_price' => $itemData['unit_price'],
-                'currency_id' => $itemData['currency_id'],
-                'weight' => $itemData['weight'],
-                'total_price' => $itemData['total_price'],
-                'description' => $itemData['description'],
-            ]);
+        if (isset($data['items']) && count($data['items']) > 0) {
+            foreach ($data['items'] as $itemData) {
+                $invoice->items()->create([
+                    'item_id' => $itemData['item_id'],
+                    'item_type' => $itemData['item_type'],
+                    'item_count' => $itemData['item_count'],
+                    'unit_price' => $itemData['unit_price'],
+                    'currency_id' => $itemData['currency_id'],
+                    'weight' => $itemData['weight'],
+                    'total_price' => $itemData['total_price'],
+                    'description' => $itemData['description'],
+                ]);
+            }
         }
 
         if (isset($data['prices'])) {
