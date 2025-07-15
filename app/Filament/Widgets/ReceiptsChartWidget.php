@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 
 class ReceiptsChartWidget extends ChartWidget
 {
-    protected static ?string $heading = 'Deposits vs Withdrawals';
+    protected static ?string $heading = 'الإيداعات مقابل السحوبات';
 
     protected static ?int $sort = 3;
 
@@ -21,10 +21,10 @@ class ReceiptsChartWidget extends ChartWidget
     protected function getFilters(): ?array
     {
         return [
-            '7days' => 'Last 7 days',
-            '30days' => 'Last 30 days',
-            '90days' => 'Last 90 days',
-            '365days' => 'Last year',
+            '7days' => 'آخر 7 أيام',
+            '30days' => 'آخر 30 يوم',
+            '90days' => 'آخر 90 يوم',
+            '365days' => 'آخر سنة',
         ];
     }
 
@@ -90,13 +90,13 @@ class ReceiptsChartWidget extends ChartWidget
         return [
             'datasets' => [
                 [
-                    'label' => 'Deposits',
+                    'label' => 'الإيداعات',
                     'data' => $deposits,
                     'borderColor' => '#10B981',
                     'backgroundColor' => 'rgba(16, 185, 129, 0.8)',
                 ],
                 [
-                    'label' => 'Withdrawals',
+                    'label' => 'السحوبات',
                     'data' => $withdrawals,
                     'borderColor' => '#EF4444',
                     'backgroundColor' => 'rgba(239, 68, 68, 0.8)',

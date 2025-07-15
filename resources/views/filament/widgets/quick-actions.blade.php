@@ -1,16 +1,16 @@
 <x-filament-widgets::widget>
     <x-filament::section>
-        <x-slot name="heading">
-            Quick Actions
+                <x-slot name="heading">
+            الإجراءات السريعة
         </x-slot>
 
         <x-slot name="description">
-            Common tasks and navigation shortcuts
+            المهام الشائعة واختصارات التنقل
         </x-slot>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div class="space-y-2">
-                <h3 class="text-sm font-medium text-gray-700 dark:text-gray-300">Create New</h3>
+                        <div class="space-y-2">
+                <h3 class="text-sm font-medium text-gray-700 dark:text-gray-300">إنشاء جديد</h3>
                 <div class="flex flex-wrap gap-2">
                     <x-filament::button
                         href="{{ route('filament.admin.resources.invoices.create') }}"
@@ -19,7 +19,7 @@
                         size="sm"
                         target="_blank"
                     >
-                        New Invoice
+                        فاتورة جديدة
                     </x-filament::button>
 
                     <x-filament::button
@@ -29,7 +29,7 @@
                         size="sm"
                         target="_blank"
                     >
-                        New Customer
+                        عميل جديد
                     </x-filament::button>
 
                     <x-filament::button
@@ -39,13 +39,13 @@
                         size="sm"
                         target="_blank"
                     >
-                        New Receipt
+                        إيصال جديد
                     </x-filament::button>
                 </div>
             </div>
 
-            <div class="space-y-2">
-                <h3 class="text-sm font-medium text-gray-700 dark:text-gray-300">View All</h3>
+                        <div class="space-y-2">
+                <h3 class="text-sm font-medium text-gray-700 dark:text-gray-300">عرض الكل</h3>
                 <div class="flex flex-wrap gap-2">
                     <x-filament::button
                         href="{{ route('filament.admin.resources.invoices.index') }}"
@@ -54,7 +54,7 @@
                         size="sm"
                         target="_blank"
                     >
-                        All Invoices
+                        جميع الفواتير
                     </x-filament::button>
 
                     <x-filament::button
@@ -64,7 +64,7 @@
                         size="sm"
                         target="_blank"
                     >
-                        All Customers
+                        جميع العملاء
                     </x-filament::button>
 
                     <x-filament::button
@@ -74,7 +74,7 @@
                         size="sm"
                         target="_blank"
                     >
-                        All Receipts
+                        جميع الإيصالات
                     </x-filament::button>
 
                     <x-filament::button
@@ -84,7 +84,7 @@
                         size="sm"
                         target="_blank"
                     >
-                        All Treasures
+                        جميع الخزائن
                     </x-filament::button>
                 </div>
             </div>

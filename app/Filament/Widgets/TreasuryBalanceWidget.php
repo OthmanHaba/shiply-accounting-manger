@@ -11,7 +11,7 @@ use Filament\Widgets\TableWidget as BaseWidget;
 
 class TreasuryBalanceWidget extends BaseWidget
 {
-    protected static ?string $heading = 'Treasury Balances';
+    protected static ?string $heading = 'أرصدة الخزانة';
 
     protected static ?int $sort = 5;
 
@@ -29,7 +29,6 @@ class TreasuryBalanceWidget extends BaseWidget
                         'accounts.accountable_type',
                         'accounts.currency_id',
                         'currencies.code as currency_code',
-                        'currencies.symbol as currency_symbol',
                         'treasures.name as treasure_name',
                         'treasures.location as treasure_location',
                         'customers.name as customer_name',
@@ -50,43 +49,43 @@ class TreasuryBalanceWidget extends BaseWidget
             )
             ->columns([
                 TextColumn::make('account_type')
-                    ->label('Type')
+                    ->label('النوع')
                     ->state(function ($record): string {
-                        return $record->accountable_type === 'App\Models\Treasure' ? 'Treasury' : 'Customer';
+                        return $record->accountable_type === 'App\Models\Treasure' ? 'خزانة' : 'عميل';
                     })
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
-                        'Treasury' => 'warning',
-                        'Customer' => 'info',
+                        'خزانة' => 'warning',
+                        'عميل' => 'info',
                         default => 'gray',
                     })
                     ->icon(fn (string $state): string => match ($state) {
-                        'Treasury' => 'heroicon-o-banknotes',
-                        'Customer' => 'heroicon-o-user',
+                        'خزانة' => 'heroicon-o-banknotes',
+                        'عميل' => 'heroicon-o-user',
                         default => 'heroicon-o-question-mark-circle',
                     }),
 
                 TextColumn::make('account_holder')
-                    ->label('Account Holder')
+                    ->label('صاحب الحساب')
                     ->state(function ($record): string {
                         if ($record->accountable_type === 'App\Models\Treasure') {
                             return $record->treasure_name.($record->treasure_location ? ' ('.$record->treasure_location.')' : '');
                         }
 
-                        return $record->customer_name ?? 'Unknown Customer';
+                        return $record->customer_name ?? 'عميل غير معروف';
                     })
                     ->searchable(['treasures.name', 'treasures.location', 'customers.name'])
                     ->sortable(),
 
                 TextColumn::make('currency_code')
-                    ->label('Currency')
+                    ->label('العملة')
                     ->badge()
                     ->color('primary')
                     ->icon('heroicon-o-currency-dollar')
                     ->sortable(),
 
                 TextColumn::make('amount')
-                    ->label('Balance')
+                    ->label('الرصيد')
                     ->state(function ($record): string {
                         $symbol = $record->currency_symbol ?? '$';
                         $amount = number_format($record->amount, 2);
@@ -106,7 +105,7 @@ class TreasuryBalanceWidget extends BaseWidget
                     ->sortable(),
 
                 TextColumn::make('updated_at')
-                    ->label('Last Updated')
+                    ->label('آخر تحديث')
                     ->dateTime()
                     ->since()
                     ->color('gray')
@@ -114,7 +113,7 @@ class TreasuryBalanceWidget extends BaseWidget
             ])
             ->actions([
                 Tables\Actions\Action::make('view_transactions')
-                    ->label('Transactions')
+                    ->label('المعاملات')
                     ->icon('heroicon-o-list-bullet')
                     ->color('info')
                     ->url(function ($record): string {
@@ -128,19 +127,19 @@ class TreasuryBalanceWidget extends BaseWidget
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('accountable_type')
-                    ->label('Account Type')
+                    ->label('نوع الحساب')
                     ->options([
-                        'App\Models\Treasure' => 'Treasury',
-                        'App\Models\Customer' => 'Customer',
+                        'App\Models\Treasure' => 'خزانة',
+                        'App\Models\Customer' => 'عميل',
                     ]),
 
                 Tables\Filters\SelectFilter::make('currency_id')
-                    ->label('Currency')
+                    ->label('العملة')
                     ->options(Currency::pluck('code', 'id')->toArray())
                     ->searchable(),
             ])
-            ->emptyStateHeading('No accounts found')
-            ->emptyStateDescription('Create treasures and customers to see their account balances here.')
+            ->emptyStateHeading('لا توجد حسابات')
+            ->emptyStateDescription('قم بإنشاء خزائن وعملاء لرؤية أرصدة حساباتهم هنا.')
             ->emptyStateIcon('heroicon-o-banknotes')
             ->defaultSort('amount', 'desc')
             ->paginated([10, 25, 50]);

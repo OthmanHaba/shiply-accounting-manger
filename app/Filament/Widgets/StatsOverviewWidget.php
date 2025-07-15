@@ -39,33 +39,33 @@ class StatsOverviewWidget extends BaseWidget
         $netCashFlow = $totalDeposits - $totalWithdrawals;
 
         return [
-            Stat::make('Total Customers', $totalCustomers)
-                ->description('Active customers in system')
+            Stat::make('إجمالي العملاء', $totalCustomers)
+                ->description('العملاء النشطين في النظام')
                 ->descriptionIcon('heroicon-m-users')
                 ->color('primary'),
 
-            Stat::make('Total Invoices', $totalInvoices)
-                ->description("{$closedInvoices} closed, {$sharedInvoices} shared")
+            Stat::make('إجمالي الفواتير', $totalInvoices)
+                ->description("{$closedInvoices} مغلقة، {$sharedInvoices} مشتركة")
                 ->descriptionIcon('heroicon-m-document-text')
                 ->color('success'),
 
-            Stat::make('Total Revenue', number_format($totalRevenue, 2))
-                ->description('From all invoices')
+            Stat::make('إجمالي الإيرادات', number_format($totalRevenue, 2))
+                ->description('من جميع الفواتير')
                 ->descriptionIcon('heroicon-m-currency-dollar')
                 ->color('success'),
 
-            Stat::make('Total Receipts', $totalReceipts)
-                ->description('Deposits and withdrawals')
+            Stat::make('إجمالي الإيصالات', $totalReceipts)
+                ->description('الإيداعات والسحوبات')
                 ->descriptionIcon('heroicon-m-receipt-percent')
                 ->color('info'),
 
-            Stat::make('Net Cash Flow', number_format($netCashFlow, 2))
-                ->description($netCashFlow >= 0 ? 'Positive flow' : 'Negative flow')
+            Stat::make('صافي التدفق النقدي', number_format($netCashFlow, 2))
+                ->description($netCashFlow >= 0 ? 'تدفق إيجابي' : 'تدفق سلبي')
                 ->descriptionIcon($netCashFlow >= 0 ? 'heroicon-m-arrow-trending-up' : 'heroicon-m-arrow-trending-down')
                 ->color($netCashFlow >= 0 ? 'success' : 'danger'),
 
-            Stat::make('Treasures', $totalTreasures)
-                ->description('Active treasury locations')
+            Stat::make('الخزائن', $totalTreasures)
+                ->description('مواقع الخزانة النشطة')
                 ->descriptionIcon('heroicon-m-banknotes')
                 ->color('warning'),
         ];

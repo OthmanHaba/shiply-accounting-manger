@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 
 class RevenueChartWidget extends ChartWidget
 {
-    protected static ?string $heading = 'Revenue Over Time';
+    protected static ?string $heading = 'الإيرادات عبر الزمن';
 
     protected static ?int $sort = 2;
 
@@ -20,10 +20,10 @@ class RevenueChartWidget extends ChartWidget
     protected function getFilters(): ?array
     {
         return [
-            '7days' => 'Last 7 days',
-            '30days' => 'Last 30 days',
-            '90days' => 'Last 90 days',
-            '365days' => 'Last year',
+            '7days' => 'آخر 7 أيام',
+            '30days' => 'آخر 30 يوم',
+            '90days' => 'آخر 90 يوم',
+            '365days' => 'آخر سنة',
         ];
     }
 
@@ -72,7 +72,7 @@ class RevenueChartWidget extends ChartWidget
         return [
             'datasets' => [
                 [
-                    'label' => 'Revenue',
+                    'label' => 'الإيرادات',
                     'data' => $revenues,
                     'borderColor' => '#10B981',
                     'backgroundColor' => 'rgba(16, 185, 129, 0.1)',

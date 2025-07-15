@@ -11,7 +11,7 @@ use Filament\Widgets\TableWidget as BaseWidget;
 
 class RecentInvoicesWidget extends BaseWidget
 {
-    protected static ?string $heading = 'Recent Invoices';
+    protected static ?string $heading = 'الفواتير الأخيرة';
 
     protected static ?int $sort = 4;
 
@@ -28,19 +28,19 @@ class RecentInvoicesWidget extends BaseWidget
             )
             ->columns([
                 TextColumn::make('code')
-                    ->label('Invoice #')
+                    ->label('رقم الفاتورة')
                     ->searchable()
                     ->sortable()
                     ->weight('bold'),
 
                 TextColumn::make('customer.name')
-                    ->label('Customer')
+                    ->label('العميل')
                     ->searchable()
                     ->sortable()
                     ->limit(30),
 
                 TextColumn::make('type')
-                    ->label('Type')
+                    ->label('النوع')
                     ->badge()
                     ->color(fn (InvoiceType $state): string => match ($state) {
                         InvoiceType::Closed => 'danger',
@@ -49,7 +49,7 @@ class RecentInvoicesWidget extends BaseWidget
                     ->formatStateUsing(fn (InvoiceType $state): string => $state->getLabel()),
 
                 TextColumn::make('total_amount')
-                    ->label('Total')
+                    ->label('الإجمالي')
                     ->state(function (Invoice $record): string {
                         $total = $record->invoicePrices->sum('total_price');
                         $currency = $record->invoicePrices->first()?->currency?->code ?? 'USD';
@@ -60,7 +60,7 @@ class RecentInvoicesWidget extends BaseWidget
                     ->color('success'),
 
                 TextColumn::make('note')
-                    ->label('Note')
+                    ->label('الملاحظة')
                     ->limit(40)
                     ->tooltip(function (TextColumn $column): ?string {
                         $state = $column->getState();
@@ -72,7 +72,7 @@ class RecentInvoicesWidget extends BaseWidget
                     }),
 
                 TextColumn::make('created_at')
-                    ->label('Created')
+                    ->label('تاريخ الإنشاء')
                     ->dateTime()
                     ->sortable()
                     ->since()
@@ -80,13 +80,13 @@ class RecentInvoicesWidget extends BaseWidget
             ])
             ->actions([
                 Tables\Actions\Action::make('view')
-                    ->label('View')
+                    ->label('عرض')
                     ->icon('heroicon-o-eye')
                     ->url(fn (Invoice $record): string => route('filament.admin.resources.invoices.view', $record))
                     ->openUrlInNewTab(),
             ])
-            ->emptyStateHeading('No invoices found')
-            ->emptyStateDescription('Create your first invoice to see it here.')
+            ->emptyStateHeading('لا توجد فواتير')
+            ->emptyStateDescription('قم بإنشاء أول فاتورة لرؤيتها هنا.')
             ->emptyStateIcon('heroicon-o-document-text')
             ->paginated(false);
     }

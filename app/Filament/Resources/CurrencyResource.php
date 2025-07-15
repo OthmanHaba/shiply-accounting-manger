@@ -109,15 +109,6 @@ class CurrencyResource extends Resource
                             ->grow(false),
                     ])
                         ->space(1),
-
-                    TextColumn::make('symbol')
-                        ->label('الرمز')
-                        ->badge()
-                        ->color('warning')
-                        ->icon('heroicon-o-currency-dollar')
-                        ->placeholder('—')
-                        ->visibleFrom('md')
-                        ->grow(false),
                 ])
                     ->from('md'),
             ])
