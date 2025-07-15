@@ -19,8 +19,8 @@ class CreateCurrency extends CreateRecord
     {
         return Notification::make()
             ->success()
-            ->title('Currency created successfully')
-            ->body('The new currency has been added to the system.')
+            ->title('تم إنشاء العملة بنجاح')
+            ->body('تم إضافة العملة إلى النظام.')
             ->icon('heroicon-o-check-circle')
             ->iconColor('success');
     }

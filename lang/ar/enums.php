@@ -9,4 +9,8 @@ return [
         'closed' => 'مغلقة',
         'shared' => 'مشتركة',
     ],
+    'receipt_type' => [
+        'deposit' => 'إيداع',
+        'withdrawal' => 'سحب',
+    ],
 ];

@@ -46,4 +46,18 @@ class Account extends Model
     {
         return $this->hasMany(Transaction::class, 'account_id');
     }
+
+    public function deposit(float $amount): static
+    {
+        $this->amount = $this->amount + $amount;
+        $this->transactions()->create([
+            'code' => 'DEPOSIT',
+            'title' => 'Deposit to Account',
+            'description' => 'deposit to account from Treasure',
+            'amount' => $amount,
+        ]);
+        $this->save();
+
+        return $this;
+    }
 }

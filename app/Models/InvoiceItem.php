@@ -36,4 +36,9 @@ class InvoiceItem extends Model
     {
         return $this->belongsTo(Currency::class);
     }
+
+    public function item(): BelongsTo
+    {
+        return $this->belongsTo(Item::class);
+    }
 }

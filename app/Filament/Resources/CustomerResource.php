@@ -32,11 +32,26 @@ class CustomerResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-users';
 
-    protected static ?string $navigationLabel = 'Customers';
+    protected static ?string $navigationLabel = null;
 
-    protected static ?string $modelLabel = 'Customer';
+    protected static ?string $modelLabel = null;
 
-    protected static ?string $pluralModelLabel = 'Customers';
+    protected static ?string $pluralModelLabel = null;
+
+    public static function getNavigationLabel(): string
+    {
+        return __('resources.customer_resource.navigation_label');
+    }
+
+    public static function getModelLabel(): string
+    {
+        return __('resources.customer_resource.model_label');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('resources.customer_resource.plural_model_label');
+    }
 
     protected static ?int $navigationSort = 1;
 
@@ -45,8 +60,8 @@ class CustomerResource extends Resource
         return $form
             ->schema([
                 Split::make([
-                    Section::make('Customer Information')
-                        ->description('Basic customer details and contact information')
+                    Section::make(__('resources.customer_resource.customer_info_section.title'))
+                        ->description(__('resources.customer_resource.customer_info_section.description'))
                         ->icon('heroicon-o-user-circle')
                         ->schema([
                             Grid::make([
@@ -55,8 +70,8 @@ class CustomerResource extends Resource
                             ])
                                 ->schema([
                                     TextInput::make('name')
-                                        ->label('Full Name')
-                                        ->placeholder('Enter customer full name')
+                                        ->label(__('resources.customer_resource.fields.name'))
+                                        ->placeholder(__('resources.customer_resource.fields.name_placeholder'))
                                         ->prefixIcon('heroicon-o-user')
                                         ->prefixIconColor('primary')
                                         ->required()
@@ -67,8 +82,8 @@ class CustomerResource extends Resource
                                         ]),
 
                                     TextInput::make('code')
-                                        ->label('Customer Code')
-                                        ->placeholder('e.g. CUST-001')
+                                        ->label(__('resources.customer_resource.fields.code'))
+                                        ->placeholder(__('resources.customer_resource.fields.code_placeholder'))
                                         ->prefixIcon('heroicon-o-hashtag')
                                         ->prefixIconColor('gray')
                                         ->required()
@@ -77,8 +92,8 @@ class CustomerResource extends Resource
                                         ->columnSpan(1),
 
                                     TextInput::make('phone')
-                                        ->label('Phone Number')
-                                        ->placeholder('e.g. +1 (555) 123-4567')
+                                        ->label(__('resources.customer_resource.fields.phone'))
+                                        ->placeholder(__('resources.customer_resource.fields.phone_placeholder'))
                                         ->prefixIcon('heroicon-o-phone')
                                         ->prefixIconColor('success')
                                         ->tel()
@@ -109,7 +124,7 @@ class CustomerResource extends Resource
                 LayoutSplit::make([
                     Stack::make([
                         TextColumn::make('name')
-                            ->label('Customer Name')
+                            ->label(__('resources.customer_resource.table.name'))
                             ->weight(FontWeight::Bold)
                             ->searchable()
                             ->sortable()
@@ -118,7 +133,7 @@ class CustomerResource extends Resource
                             ->grow(false),
 
                         TextColumn::make('code')
-                            ->label('Code')
+                            ->label(__('resources.customer_resource.table.code'))
                             ->badge()
                             ->color('gray')
                             ->icon('heroicon-o-hashtag')
@@ -128,11 +143,11 @@ class CustomerResource extends Resource
                         ->space(1),
 
                     TextColumn::make('phone')
-                        ->label('Phone')
+                        ->label(__('resources.customer_resource.table.phone'))
                         ->icon('heroicon-o-phone')
                         ->iconColor('success')
                         ->copyable()
-                        ->copyMessage('Phone number copied!')
+                        ->copyMessage(__('resources.customer_resource.messages.phone_copied'))
                         ->visibleFrom('md')
                         ->grow(false),
 
@@ -168,13 +183,13 @@ class CustomerResource extends Resource
             ->actions([
                 ViewAction::make()
                     ->iconButton()
-                    ->tooltip('View Customer'),
+                    ->tooltip(__('resources.customer_resource.actions.view')),
                 EditAction::make()
                     ->iconButton()
-                    ->tooltip('Edit Customer'),
+                    ->tooltip(__('resources.customer_resource.actions.edit')),
                 DeleteAction::make()
                     ->iconButton()
-                    ->tooltip('Delete Customer'),
+                    ->tooltip(__('resources.customer_resource.actions.delete')),
             ])
             ->bulkActions([
                 BulkActionGroup::make([

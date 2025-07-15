@@ -28,11 +28,13 @@ class CurrencyResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-currency-dollar';
 
-    protected static ?string $navigationLabel = 'Currencies';
+    protected static ?string $navigationLabel = 'العملات';
 
-    protected static ?string $modelLabel = 'Currency';
+    protected static ?string $modelLabel = 'العملة';
 
-    protected static ?string $pluralModelLabel = 'Currencies';
+    protected static ?string $pluralModelLabel = 'العملات';
+
+    protected static ?string $navigationGroup = 'الاعدادات';
 
     protected static ?int $navigationSort = 2;
 
@@ -50,7 +52,7 @@ class CurrencyResource extends Resource
                         ])
                             ->schema([
                                 TextInput::make('name')
-                                    ->label('Currency Name')
+                                    ->label('الاسم')
                                     ->placeholder('e.g. US Dollar, Euro, British Pound')
                                     ->prefixIcon('heroicon-o-globe-alt')
                                     ->prefixIconColor('primary')
@@ -62,7 +64,7 @@ class CurrencyResource extends Resource
                                     ]),
 
                                 TextInput::make('code')
-                                    ->label('Currency Code')
+                                    ->label('الرمز')
                                     ->placeholder('e.g. USD, EUR, GBP')
                                     ->prefixIcon('heroicon-o-hashtag')
                                     ->prefixIconColor('success')
@@ -91,7 +93,7 @@ class CurrencyResource extends Resource
                 Split::make([
                     Stack::make([
                         TextColumn::make('name')
-                            ->label('Currency Name')
+                            ->label('الاسم')
                             ->weight(FontWeight::Bold)
                             ->searchable()
                             ->sortable()
@@ -100,7 +102,7 @@ class CurrencyResource extends Resource
                             ->grow(false),
 
                         TextColumn::make('code')
-                            ->label('Code')
+                            ->label('الرمز')
                             ->badge()
                             ->color('success')
                             ->icon('heroicon-o-hashtag')
@@ -109,7 +111,7 @@ class CurrencyResource extends Resource
                         ->space(1),
 
                     TextColumn::make('symbol')
-                        ->label('Symbol')
+                        ->label('الرمز')
                         ->badge()
                         ->color('warning')
                         ->icon('heroicon-o-currency-dollar')
@@ -129,19 +131,19 @@ class CurrencyResource extends Resource
             ->actions([
                 ViewAction::make()
                     ->iconButton()
-                    ->tooltip('View Currency'),
+                    ->tooltip('عرض العملة'),
                 EditAction::make()
                     ->iconButton()
-                    ->tooltip('Edit Currency'),
+                    ->tooltip('تعديل العملة'),
                 DeleteAction::make()
                     ->iconButton()
-                    ->tooltip('Delete Currency')
+                    ->tooltip('حذف العملة')
                     ->requiresConfirmation()
                     ->modalIcon('heroicon-o-exclamation-triangle')
                     ->modalIconColor('danger')
-                    ->modalHeading('Delete Currency')
-                    ->modalDescription('Are you sure you want to delete this currency? This action cannot be undone and will affect all associated accounts.')
-                    ->modalSubmitActionLabel('Yes, delete currency'),
+                    ->modalHeading('حذف العملة')
+                    ->modalDescription('هل أنت متأكد من حذف هذه العملة؟ هذا الإجراء لا يمكن التراجع عنه وسيؤثر على جميع الحسابات المرتبطة.')
+                    ->modalSubmitActionLabel('نعم, حذف العملة'),
             ])
             ->bulkActions([
                 BulkActionGroup::make([

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\CustomerResource\RelationManagers;
+namespace App\Filament\Resources\TreasureResource\RelationManagers;
 
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -13,23 +13,21 @@ class AccountRelationManager extends RelationManager
 {
     protected static string $relationship = 'accounts';
 
-    protected static ?string $title = null;
-
     protected static ?string $icon = 'heroicon-o-banknotes';
 
     public function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\Section::make(__('resources.customer_resource.accounts_relation.title'))
-                    ->description(__('resources.customer_resource.accounts_relation.description'))
+                Forms\Components\Section::make(__('resources.treasure_resource.accounts_relation.title'))
+                    ->description(__('resources.treasure_resource.accounts_relation.description'))
                     ->icon('heroicon-o-banknotes')
                     ->schema([
                         Forms\Components\Grid::make(2)
                             ->schema([
                                 Forms\Components\TextInput::make('code')
-                                    ->label(__('resources.customer_resource.accounts_relation.fields.code'))
-                                    ->placeholder(__('resources.customer_resource.accounts_relation.fields.code_placeholder'))
+                                    ->label(__('resources.treasure_resource.accounts_relation.fields.code'))
+                                    ->placeholder(__('resources.treasure_resource.accounts_relation.fields.code_placeholder'))
                                     ->prefixIcon('heroicon-o-hashtag')
                                     ->prefixIconColor('gray')
                                     ->required()
@@ -37,21 +35,23 @@ class AccountRelationManager extends RelationManager
                                     ->unique(ignoreRecord: true),
 
                                 Forms\Components\Select::make('currency_id')
-                                    ->label(__('resources.customer_resource.accounts_relation.fields.currency_id'))
+                                    ->label(__('resources.treasure_resource.accounts_relation.fields.currency_id'))
                                     ->relationship('currency', 'code')
                                     ->prefixIcon('heroicon-o-currency-dollar')
                                     ->prefixIconColor('success')
                                     ->required()
                                     ->searchable()
-                                    ->preload(),
+                                    ->preload()
+                                    ->native(false),
 
                                 Forms\Components\TextInput::make('amount')
-                                    ->label(__('resources.customer_resource.accounts_relation.fields.amount'))
-                                    ->placeholder(__('resources.customer_resource.accounts_relation.fields.amount_placeholder'))
+                                    ->label(__('resources.treasure_resource.accounts_relation.fields.amount'))
+                                    ->placeholder(__('resources.treasure_resource.accounts_relation.fields.amount_placeholder'))
                                     ->prefixIcon('heroicon-o-banknotes')
                                     ->prefixIconColor('primary')
                                     ->numeric()
                                     ->step(0.01)
+                                    ->default(0)
                                     ->required()
                                     ->columnSpan(2),
                             ]),
@@ -65,7 +65,7 @@ class AccountRelationManager extends RelationManager
             ->recordTitleAttribute('code')
             ->columns([
                 Tables\Columns\TextColumn::make('code')
-                    ->label(__('resources.customer_resource.accounts_relation.table.code'))
+                    ->label(__('resources.treasure_resource.accounts_relation.table.code'))
                     ->icon('heroicon-o-hashtag')
                     ->iconColor('gray')
                     ->weight(FontWeight::Medium)
@@ -73,14 +73,14 @@ class AccountRelationManager extends RelationManager
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('currency.code')
-                    ->label(__('resources.customer_resource.accounts_relation.table.currency'))
+                    ->label(__('resources.treasure_resource.accounts_relation.table.currency'))
                     ->badge()
                     ->color('primary')
                     ->icon('heroicon-o-currency-dollar')
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('amount')
-                    ->label(__('resources.customer_resource.accounts_relation.table.balance'))
+                    ->label(__('resources.treasure_resource.accounts_relation.table.balance'))
                     ->money(fn ($record) => $record->currency->code ?? 'USD')
                     ->badge()
                     ->color(fn ($state) => $state > 0 ? 'success' : ($state < 0 ? 'danger' : 'gray'))
@@ -88,13 +88,13 @@ class AccountRelationManager extends RelationManager
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('created_at')
-                    ->label(__('resources.customer_resource.accounts_relation.table.created'))
+                    ->label(__('resources.treasure_resource.accounts_relation.table.created'))
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
 
                 Tables\Columns\TextColumn::make('updated_at')
-                    ->label(__('resources.customer_resource.accounts_relation.table.updated'))
+                    ->label(__('resources.treasure_resource.accounts_relation.table.updated'))
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
@@ -103,33 +103,35 @@ class AccountRelationManager extends RelationManager
             ->filters([
                 Tables\Filters\SelectFilter::make('currency')
                     ->relationship('currency', 'code')
-                    ->label(__('resources.customer_resource.accounts_relation.filters.currency'))
+                    ->label(__('resources.treasure_resource.accounts_relation.filters.currency'))
                     ->multiple()
                     ->preload(),
 
                 Tables\Filters\Filter::make('positive_balance')
-                    ->label(__('resources.customer_resource.accounts_relation.filters.positive_balance'))
+                    ->label(__('resources.treasure_resource.accounts_relation.filters.positive_balance'))
                     ->query(fn ($query) => $query->where('amount', '>', 0))
                     ->toggle(),
 
                 Tables\Filters\Filter::make('negative_balance')
-                    ->label(__('resources.customer_resource.accounts_relation.filters.negative_balance'))
+                    ->label(__('resources.treasure_resource.accounts_relation.filters.negative_balance'))
                     ->query(fn ($query) => $query->where('amount', '<', 0))
                     ->toggle(),
             ])
             ->headerActions([
                 Tables\Actions\CreateAction::make()
                     ->icon('heroicon-o-plus')
-                    ->label(__('resources.customer_resource.accounts_relation.actions.add_account'))
-                    ->color('primary'),
+                    ->label(__('resources.treasure_resource.accounts_relation.actions.add_account'))
+                    ->color('primary')
+                    ->modalWidth('md'),
             ])
             ->actions([
                 Tables\Actions\EditAction::make()
                     ->iconButton()
-                    ->tooltip(__('resources.customer_resource.accounts_relation.actions.edit_account')),
+                    ->tooltip(__('resources.treasure_resource.accounts_relation.actions.edit_account'))
+                    ->modalWidth('md'),
                 Tables\Actions\DeleteAction::make()
                     ->iconButton()
-                    ->tooltip(__('resources.customer_resource.accounts_relation.actions.delete_account'))
+                    ->tooltip(__('resources.treasure_resource.accounts_relation.actions.delete_account'))
                     ->requiresConfirmation(),
             ])
             ->bulkActions([
@@ -138,7 +140,7 @@ class AccountRelationManager extends RelationManager
                 ]),
             ])
             ->emptyStateIcon('heroicon-o-banknotes')
-            ->emptyStateHeading(__('resources.customer_resource.accounts_relation.empty_state.heading'))
-            ->emptyStateDescription(__('resources.customer_resource.accounts_relation.empty_state.description'));
+            ->emptyStateHeading(__('resources.treasure_resource.accounts_relation.empty_state.heading'))
+            ->emptyStateDescription(__('resources.treasure_resource.accounts_relation.empty_state.description'));
     }
 }

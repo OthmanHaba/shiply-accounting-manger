@@ -12,6 +12,14 @@ return new class extends Migration
             $table->id();
             $table->string('note')->nullable();
             $table->string('amount');
+            $table->foreignId('customer_id')
+                ->constrained();
+
+            $table->foreignIdFor(\App\Models\Treasure::class);
+
+            $table->foreignId('currency_id')
+                ->constrained();
+
             $table->string('type');
 
             $table->timestamps();

@@ -11,6 +11,7 @@ class TreasureObserver
     {
         foreach (Currency::all() as $currency) {
             $treasure->accounts()->create([
+                'code' => strtoupper($treasure->name.'-'.$currency->code),
                 'amount' => 0,
                 'currency_id' => $currency->id,
             ]);

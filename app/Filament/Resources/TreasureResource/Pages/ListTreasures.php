@@ -3,7 +3,7 @@
 namespace App\Filament\Resources\TreasureResource\Pages;
 
 use App\Filament\Resources\TreasureResource;
-use Filament\Actions\CreateAction;
+use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 
 class ListTreasures extends ListRecords
@@ -13,7 +13,8 @@ class ListTreasures extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            CreateAction::make(),
+            Actions\CreateAction::make()
+                ->label(__('resources.treasure_resource.actions.create')),
         ];
     }
 }

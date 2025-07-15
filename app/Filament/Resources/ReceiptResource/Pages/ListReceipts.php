@@ -13,7 +13,8 @@ class ListReceipts extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            Actions\CreateAction::make()
+                ->label(__('resources.receipt_resource.actions.create')),
         ];
     }
 }

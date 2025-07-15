@@ -15,7 +15,7 @@ class ListCurrencies extends ListRecords
         return [
             CreateAction::make()
                 ->icon('heroicon-o-plus')
-                ->label('Add New Currency')
+                ->label('إضافة عملة جديدة')
                 ->color('primary'),
         ];
     }

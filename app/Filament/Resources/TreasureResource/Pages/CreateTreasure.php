@@ -9,10 +9,13 @@ class CreateTreasure extends CreateRecord
 {
     protected static string $resource = TreasureResource::class;
 
-    protected function getHeaderActions(): array
+    protected function getCreatedNotificationTitle(): ?string
     {
-        return [
+        return __('resources.treasure_resource.messages.created');
+    }
 
-        ];
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('view', ['record' => $this->getRecord()]);
     }
 }

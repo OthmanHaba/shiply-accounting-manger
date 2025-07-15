@@ -22,11 +22,20 @@ class ItemResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-cube';
 
+    protected static ?string $navigationGroup = 'الاعدادات';
+
+    protected static ?string $navigationLabel = 'الاصناف';
+
+    protected static ?string $modelLabel = 'الصنف';
+
+    protected static ?string $pluralModelLabel = 'الصنوف';
+
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 TextInput::make('name')
+                    ->label('الاسم')
                     ->required(),
             ]);
     }
@@ -36,6 +45,7 @@ class ItemResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('name')
+                    ->label('الاسم')
                     ->searchable()
                     ->sortable(),
             ])

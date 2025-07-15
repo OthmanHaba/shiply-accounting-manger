@@ -11,12 +11,11 @@ return new class extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->string('description');
+            $table->string('title')->nullable();
+            $table->string('description')->nullable();
             $table->foreignIdFor(Account::class)->constrained();
             $table->string('amount');
-            $table->string('currency');
-            $table->string('type');
+            $table->string('type')->nullable();
             $table->timestamps();
         });
     }
