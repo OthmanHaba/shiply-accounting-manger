@@ -134,7 +134,7 @@ class ReceiptResource extends Resource
                     ->sortable()
                     ->limit(50),
 
-                TextColumn::make('invoices.customer.name')
+                TextColumn::make('customer.name')
                     ->label(__('resources.receipt_resource.table.customer'))
                     ->searchable()
                     ->sortable(),

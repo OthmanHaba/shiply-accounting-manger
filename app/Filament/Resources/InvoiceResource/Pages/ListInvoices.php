@@ -18,7 +18,7 @@ class ListInvoices extends ListRecords
         return [
             CreateAction::make()
                 ->icon('heroicon-o-plus')
-                ->label('Create New Invoice')
+                ->label('  فاتورة جديدة')
                 ->color('primary'),
         ];
     }

@@ -13,7 +13,7 @@ class AccountRelationManager extends RelationManager
 {
     protected static string $relationship = 'accounts';
 
-    protected static ?string $title = null;
+    protected static ?string $title = 'الحسابات';
 
     protected static ?string $icon = 'heroicon-o-banknotes';
 

@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\CustomerResource\Pages;
 use App\Filament\Resources\CustomerResource\RelationManagers\AccountRelationManager;
+use App\Filament\Resources\CustomerResource\RelationManagers\ReceiptsRelationManager;
 use App\Models\Currency;
 use App\Models\Customer;
 use Filament\Forms\Components\Grid;
@@ -215,6 +216,7 @@ class CustomerResource extends Resource
     {
         return [
             AccountRelationManager::class,
+            ReceiptsRelationManager::class,
         ];
     }
 
