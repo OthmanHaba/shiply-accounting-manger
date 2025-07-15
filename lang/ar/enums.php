@@ -10,7 +10,7 @@ return [
         'shared' => 'مشتركة',
     ],
     'receipt_type' => [
-        'deposit' => 'إيداع',
-        'withdrawal' => 'سحب',
+        'deposit' => 'قبض',
+        'withdrawal' => 'صرف',
     ],
 ];

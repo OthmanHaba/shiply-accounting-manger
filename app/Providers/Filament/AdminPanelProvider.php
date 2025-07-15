@@ -2,6 +2,8 @@
 
 namespace App\Providers\Filament;
 
+use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
+use Filament\Enums\ThemeMode;
 use Filament\FontProviders\LocalFontProvider;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
@@ -25,6 +27,8 @@ class AdminPanelProvider extends PanelProvider
     {
         return $panel
             ->brandLogo(asset('img/logo.jpg'))
+            ->favicon(asset('img/logo.jpg'))
+            ->brandName('شركة الخطوط الزرقاء للشحن')
             ->topNavigation()
             ->font(
                 family: 'Tajwal',
@@ -53,6 +57,10 @@ class AdminPanelProvider extends PanelProvider
                 \App\Filament\Widgets\RecentInvoicesWidget::class,
                 \App\Filament\Widgets\TreasuryBalanceWidget::class,
             ])
+            ->unsavedChangesAlerts()
+            ->databaseTransactions()
+            ->darkMode(false)
+            ->defaultThemeMode(ThemeMode::Light)
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
@@ -64,6 +72,11 @@ class AdminPanelProvider extends PanelProvider
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
             ])
+            ->plugins([
+                FilamentShieldPlugin::make(),
+            ])
+            ->databaseNotifications()
+            ->databaseNotificationsPolling('30s')
             ->authMiddleware([
                 Authenticate::class,
             ]);

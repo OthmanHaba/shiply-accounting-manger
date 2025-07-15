@@ -46,7 +46,7 @@ class CreateReceipt extends CreateRecord
         if ($data['type'] == ReceiptType::WITHDRAWAL->value) {
             $account = $customer->accounts()->where('currency_id', $data['currency_id'])->first();
             if ($account) {
-                $account->withdraw($data['amount']);
+                $account->deposit($data['amount']);
                 $treasury->accounts()->where('currency_id', $data['currency_id'])->first()->deposit($data['amount']);
             }
         }

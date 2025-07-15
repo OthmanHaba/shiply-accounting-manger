@@ -3,11 +3,13 @@
 namespace App\Filament\Widgets;
 
 use Filament\Actions\Action;
-use Filament\Actions\ActionGroup;
+use Filament\Actions\Concerns\InteractsWithActions;
 use Filament\Widgets\Widget;
 
 class QuickActionsWidget extends Widget
 {
+    use InteractsWithActions;
+
     protected static string $view = 'filament.widgets.quick-actions';
 
     protected static ?int $sort = 1;
@@ -17,66 +19,54 @@ class QuickActionsWidget extends Widget
     public function getActions(): array
     {
         return [
-            ActionGroup::make([
-                Action::make('create_invoice')
-                    ->label('New Invoice')
-                    ->icon('heroicon-o-document-text')
-                    ->color('success')
-                    ->url(route('filament.admin.resources.invoices.create'))
-                    ->openUrlInNewTab(),
-
-                Action::make('create_customer')
-                    ->label('New Customer')
-                    ->icon('heroicon-o-user-plus')
-                    ->color('primary')
-                    ->url(route('filament.admin.resources.customers.create'))
-                    ->openUrlInNewTab(),
-
-                Action::make('create_receipt')
-                    ->label('New Receipt')
-                    ->icon('heroicon-o-receipt-percent')
-                    ->color('info')
-                    ->url(route('filament.admin.resources.receipts.create'))
-                    ->openUrlInNewTab(),
-            ])
-                ->label('Quick Actions')
-                ->icon('heroicon-o-plus-circle')
+            Action::make('create_invoice')
+                ->label('فاتورة جديدة')
+                ->icon('heroicon-o-document-text')
                 ->color('success')
-                ->button(),
+                ->url(route('filament.admin.resources.invoices.create'))
+                ->openUrlInNewTab(),
 
-            ActionGroup::make([
-                Action::make('view_invoices')
-                    ->label('All Invoices')
-                    ->icon('heroicon-o-document-text')
-                    ->color('gray')
-                    ->url(route('filament.admin.resources.invoices.index'))
-                    ->openUrlInNewTab(),
+            Action::make('create_customer')
+                ->label('عميل جديد')
+                ->icon('heroicon-o-user-plus')
+                ->color('primary')
+                ->url(route('filament.admin.resources.customers.create'))
+                ->openUrlInNewTab(),
 
-                Action::make('view_customers')
-                    ->label('All Customers')
-                    ->icon('heroicon-o-users')
-                    ->color('gray')
-                    ->url(route('filament.admin.resources.customers.index'))
-                    ->openUrlInNewTab(),
+            Action::make('create_receipt')
+                ->label('إيصال جديد')
+                ->icon('heroicon-o-receipt-percent')
+                ->color('info')
+                ->url(route('filament.admin.resources.receipts.create'))
+                ->openUrlInNewTab(),
 
-                Action::make('view_receipts')
-                    ->label('All Receipts')
-                    ->icon('heroicon-o-receipt-percent')
-                    ->color('gray')
-                    ->url(route('filament.admin.resources.receipts.index'))
-                    ->openUrlInNewTab(),
-
-                Action::make('view_treasures')
-                    ->label('All Treasures')
-                    ->icon('heroicon-o-banknotes')
-                    ->color('gray')
-                    ->url(route('filament.admin.resources.treasures.index'))
-                    ->openUrlInNewTab(),
-            ])
-                ->label('View All')
-                ->icon('heroicon-o-eye')
+            Action::make('view_invoices')
+                ->label('جميع الفواتير')
+                ->icon('heroicon-o-document-text')
                 ->color('gray')
-                ->button(),
+                ->url(route('filament.admin.resources.invoices.index'))
+                ->openUrlInNewTab(),
+
+            Action::make('view_customers')
+                ->label('جميع العملاء')
+                ->icon('heroicon-o-users')
+                ->color('gray')
+                ->url(route('filament.admin.resources.currencies.index')) // confirm if this route is correct
+                ->openUrlInNewTab(),
+
+            Action::make('view_receipts')
+                ->label('جميع الإيصالات')
+                ->icon('heroicon-o-receipt-percent')
+                ->color('gray')
+                ->url(route('filament.admin.resources.receipts.index'))
+                ->openUrlInNewTab(),
+
+            Action::make('view_treasures')
+                ->label('جميع الخزائن')
+                ->icon('heroicon-o-banknotes')
+                ->color('gray')
+                ->url(route('filament.admin.resources.treasures.index'))
+                ->openUrlInNewTab(),
         ];
     }
 }

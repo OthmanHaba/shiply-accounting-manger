@@ -55,12 +55,12 @@ class StatsOverviewWidget extends BaseWidget
                 ->color('success'),
 
             Stat::make('إجمالي الإيصالات', $totalReceipts)
-                ->description('الإيداعات والسحوبات')
+                ->description('القبوض والصرف')
                 ->descriptionIcon('heroicon-m-receipt-percent')
                 ->color('info'),
 
-            Stat::make('صافي التدفق النقدي', number_format($netCashFlow, 2))
-                ->description($netCashFlow >= 0 ? 'تدفق إيجابي' : 'تدفق سلبي')
+            Stat::make('الحركة المالية', number_format($netCashFlow, 2))
+                ->description($netCashFlow >= 0 ? ' إيجابي' : ' سلبي')
                 ->descriptionIcon($netCashFlow >= 0 ? 'heroicon-m-arrow-trending-up' : 'heroicon-m-arrow-trending-down')
                 ->color($netCashFlow >= 0 ? 'success' : 'danger'),
 
