@@ -51,7 +51,7 @@ RUN php artisan route:cache
 RUN php artisan view:cache
 
 # Copy nginx config
-COPY ./docker/nginx.conf /etc/nginx/nginx.conf
+#COPY ./docker/nginx.conf /etc/nginx/nginx.conf
 
 # Expose port 80
 EXPOSE 80
