@@ -10,6 +10,11 @@ use Illuminate\Support\Facades\DB;
 
 class ReceiptsChartWidget extends ChartWidget
 {
+    public static function canView(): bool
+    {
+        return auth()->user()->can('widget_'.class_basename(ReceiptsChartWidget::class));
+    }
+
     protected static ?string $heading = 'الإيداعات مقابل السحوبات';
 
     protected static ?int $sort = 3;

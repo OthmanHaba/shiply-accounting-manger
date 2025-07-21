@@ -9,6 +9,11 @@ use Illuminate\Support\Facades\DB;
 
 class RevenueChartWidget extends ChartWidget
 {
+    public static function canView(): bool
+    {
+        return auth()->user()->can('widget_'.class_basename(RevenueChartWidget::class));
+    }
+
     protected static ?string $heading = 'الإيرادات عبر الزمن';
 
     protected static ?int $sort = 2;

@@ -13,6 +13,11 @@ class TreasuryBalanceWidget extends BaseWidget
 {
     protected static ?string $heading = 'أرصدة الخزانة';
 
+    public static function canView(): bool
+    {
+        return auth()->user()->can('widget_'.class_basename(TreasuryBalanceWidget::class));
+    }
+
     protected static ?int $sort = 5;
 
     protected int|string|array $columnSpan = 'full';

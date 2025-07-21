@@ -14,6 +14,11 @@ use Filament\Widgets\StatsOverviewWidget\Stat;
 
 class StatsOverviewWidget extends BaseWidget
 {
+    public static function canView(): bool
+    {
+        return auth()->user()->can('widget_'.class_basename(StatsOverviewWidget::class));
+    }
+
     protected function getStats(): array
     {
         // Get total customers

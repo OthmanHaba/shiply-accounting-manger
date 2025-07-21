@@ -75,7 +75,8 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->plugins([
                 FilamentShieldPlugin::make(),
-                ActivitylogPlugin::make(),
+                ActivitylogPlugin::make()
+                    ->authorize(fn () => auth()->user()->isSuperAdmin()),
             ])
             ->databaseNotifications()
             ->databaseNotificationsPolling('30s')

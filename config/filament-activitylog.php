@@ -2,15 +2,15 @@
 
 return [
     'resources' => [
-        'label' => 'Activity Log',
-        'plural_label' => 'Activity Logs',
+        'label' => 'سجل النشاط',
+        'plural_label' => 'سجلات النشاط',
         'hide_restore_action' => false,
         'restore_action_label' => 'Restore',
         'hide_resource_action' => false,
         'hide_restore_model_action' => true,
         'resource_action_label' => 'View',
         'navigation_item' => true,
-        'navigation_group' => null,
+        'navigation_group' => 'الاعدادات',
         'navigation_icon' => 'heroicon-o-shield-check',
         'navigation_sort' => null,
         'default_sort_column' => 'id',

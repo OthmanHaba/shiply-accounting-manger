@@ -84,7 +84,6 @@ class InvoiceResource extends Resource
                                         if (is_null($code)) {
                                             return 'INV-001';
                                         }
-
                                         $set('code', 'INV-'.(int) $code + 1);
                                     })
                                     ->prefixIcon('heroicon-o-hashtag')
@@ -492,6 +491,11 @@ class InvoiceResource extends Resource
         $count = static::getModel()::count();
 
         return $count > 50 ? 'success' : ($count > 20 ? 'warning' : 'primary');
+    }
+
+    public static function canAccess(): bool
+    {
+        return true;
     }
 
     public static function calculateItemPrice(Set $set, Get $get): void

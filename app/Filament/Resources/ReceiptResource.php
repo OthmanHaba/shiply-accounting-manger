@@ -4,19 +4,21 @@ namespace App\Filament\Resources;
 
 use App\Enums\ReceiptType;
 use App\Filament\Resources\ReceiptResource\Pages;
+use App\Models\Account;
 use App\Models\Currency;
 use App\Models\Customer;
 use App\Models\Receipt;
 use App\Models\Treasure;
+use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\ViewField;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
 use Filament\Resources\Resource;
 use Filament\Tables;
-use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -78,7 +80,42 @@ class ReceiptResource extends Resource
                             ->label(__('resources.receipt_resource.fields.type'))
                             ->options(ReceiptType::class)
                             ->required()
+                            ->reactive()
                             ->native(false),
+
+                        ViewField::make('accounts')
+                            ->live()
+                            ->viewData([
+                                'accounts' => function (Get $get) {
+                                    $customer = Customer::find($get('customer_id'));
+
+                                    return $customer->accounts;
+                                },
+                            ])
+                            ->view('components.forms.fields.accounts-helper', [
+                                'accounts' => function (Get $get) {
+                                    $customer = Customer::find($get('customer_id'));
+
+                                    return $customer->accounts;
+                                },
+                            ]),
+                        Placeholder::make('note')
+                            ->dehydrated(false)
+                            ->label(__('resources.receipt_resource.fields.note'))
+                            ->columnSpan(2)
+                            ->content(function (Get $get) {
+                                $customer = Customer::find($get('customer_id'));
+
+                                return $customer
+                                    ? $customer->accounts
+                                        ->map(fn (Account $account) => $account->currency->code.' '.$account->amount)
+                                        ->implode("\n - \n") // newline-separated list
+                                    : 'لم يتم العثور على حسابات.';
+                            })
+                            ->extraAttributes([
+                                'class' => 'mt-2 bg-gray-50 p-4 rounded-md',
+                            ])
+                            ->reactive(),
                     ])
                     ->columns(2),
 
@@ -139,13 +176,8 @@ class ReceiptResource extends Resource
                     ->searchable()
                     ->sortable(),
 
-                BadgeColumn::make('type')
+                Tables\Columns\TextColumn::make('type')
                     ->label(__('resources.receipt_resource.table.type'))
-                    ->formatStateUsing(fn ($state) => $state->getLabel())
-                    ->colors([
-                        'success' => ReceiptType::DEPOSIT,
-                        'danger' => ReceiptType::WITHDRAWAL,
-                    ])
                     ->sortable(),
 
                 TextColumn::make('amount')

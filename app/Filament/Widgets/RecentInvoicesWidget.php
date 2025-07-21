@@ -11,6 +11,11 @@ use Filament\Widgets\TableWidget as BaseWidget;
 
 class RecentInvoicesWidget extends BaseWidget
 {
+    public static function canView(): bool
+    {
+        return auth()->user()->can('widget_'.class_basename(RecentInvoicesWidget::class));
+    }
+
     protected static ?string $heading = 'الفواتير الأخيرة';
 
     protected static ?int $sort = 4;
