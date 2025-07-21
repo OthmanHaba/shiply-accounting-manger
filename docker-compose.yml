@@ -15,5 +15,3 @@ services:
         volumes:
             - .:/var/www/html
             - ./nginx.conf:/etc/nginx/nginx.conf
-        depends_on:
-            - app
