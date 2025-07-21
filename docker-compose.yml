@@ -1,0 +1,19 @@
+services:
+    app:
+        build: .
+        container_name: laravel_app
+        volumes:
+            - .:/var/www/html
+        depends_on:
+            - nginx
+
+    nginx:
+        image: nginx:alpine
+        container_name: nginx_server
+        ports:
+            - "80:80"
+        volumes:
+            - .:/var/www/html
+            - ./nginx.conf:/etc/nginx/nginx.conf
+        depends_on:
+            - app
