@@ -45,5 +45,3 @@ cmds = [
 [start]
 cmd = "php-fpm & nginx -g 'daemon off;'"
 
-[staticAssets]
-"public" = "/"
