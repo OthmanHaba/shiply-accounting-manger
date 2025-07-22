@@ -1,18 +1,3 @@
-[variables]
-# PHP Configuration
-PHP_VERSION = "8.4"
-NIXPACKS_PHP_ROOT_DIR = "/var/www"
-NIXPACKS_PHP_FALLBACK_PATH = "public/index.php"
-
-# Node.js Configuration
-NODE_VERSION = "20"
-
-# Laravel specific
-APP_ENV = "production"
-APP_DEBUG = "false"
-LOG_CHANNEL = "stderr"
-LOG_STDERR_FORMATTER = "Monolog\\Formatter\\JsonFormatter"
-
 [phases.setup]
 nixPkgs = [
     "php84",
