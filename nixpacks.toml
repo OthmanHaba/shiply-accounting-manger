@@ -57,24 +57,6 @@ cmds = [
     "php artisan filament:optimize"
 ]
 
-[phases.setup.onlyIncludeFiles]
-paths = [
-    "composer.json",
-    "composer.lock",
-    "package.json",
-    "package-lock.json",
-    "artisan",
-    "public",
-    "app",
-    "bootstrap",
-    "config",
-    "database",
-    "resources",
-    "routes",
-    "storage",
-    "lang"
-]
-
 [start]
 cmd = "php-fpm & nginx -g 'daemon off;'"
 
