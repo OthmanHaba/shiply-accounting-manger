@@ -76,6 +76,7 @@ class AdminPanelProvider extends PanelProvider
             ->plugins([
                 FilamentShieldPlugin::make(),
                 ActivitylogPlugin::make()
+                    ->navigationGroup('إدارة المستخدمين')
                     ->authorize(fn () => auth()->user()->isSuperAdmin()),
             ])
             ->databaseNotifications()
