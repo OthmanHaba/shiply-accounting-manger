@@ -36,14 +36,14 @@ nixPkgs = [
     "php84Extensions.gd",
     "php84Extensions.intl",
     "php84Extensions.redis",
-    "nodejs_20",
+    "nodejs",
     "npm",
     "nginx"
 ]
 
 [phases.install]
 cmds = [
-    "composer install --no-dev --optimize-autoloader --no-interaction",
+    "composer install",
     "npm ci --only=production"
 ]
 
