@@ -4,12 +4,10 @@ namespace App\Filament\Resources;
 
 use App\Enums\ReceiptType;
 use App\Filament\Resources\ReceiptResource\Pages;
-use App\Models\Account;
 use App\Models\Currency;
 use App\Models\Customer;
 use App\Models\Receipt;
 use App\Models\Treasure;
-use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -58,7 +56,6 @@ class ReceiptResource extends Resource
                         TextInput::make('note')
                             ->label(__('resources.receipt_resource.fields.note'))
                             ->placeholder(__('resources.receipt_resource.fields.note_placeholder'))
-                            ->required()
                             ->maxLength(255)
                             ->columnSpan(2),
 
@@ -85,39 +82,24 @@ class ReceiptResource extends Resource
                             ->reactive()
                             ->native(false),
 
-                        ViewField::make('accounts')
+                        ViewField::make('customer_accounts')
+                            ->label(__('resources.receipt_resource.fields.customer_accounts'))
                             ->live()
-                            ->viewData([
-                                'accounts' => function (Get $get) {
-                                    $customer = Customer::find($get('customer_id'));
+                            ->visible(fn (Get $get) => $get('customer_id'))
+                            ->viewData(function (Get $get) {
+                                $customerId = $get('customer_id');
+                                if (! $customerId) {
+                                    return ['accounts' => collect()];
+                                }
 
-                                    return $customer->accounts;
-                                },
-                            ])
-                            ->view('components.forms.fields.accounts-helper', [
-                                'accounts' => function (Get $get) {
-                                    $customer = Customer::find($get('customer_id'));
+                                $customer = Customer::with(['accounts.currency'])->find($customerId);
 
-                                    return $customer->accounts;
-                                },
-                            ]),
-                        Placeholder::make('note')
-                            ->dehydrated(false)
-                            ->label(__('resources.receipt_resource.fields.note'))
-                            ->columnSpan(2)
-                            ->content(function (Get $get) {
-                                $customer = Customer::find($get('customer_id'));
-
-                                return $customer
-                                    ? $customer->accounts
-                                        ->map(fn (Account $account) => $account->currency->code.' '.$account->amount)
-                                        ->implode("\n - \n") // newline-separated list
-                                    : 'لم يتم العثور على حسابات.';
+                                return [
+                                    'accounts' => $customer ? $customer->accounts : collect(),
+                                ];
                             })
-                            ->extraAttributes([
-                                'class' => 'mt-2 bg-gray-50 p-4 rounded-md',
-                            ])
-                            ->reactive(),
+                            ->view('components.forms.fields.accounts-helper')
+                            ->columnSpan(2),
                     ])
                     ->columns(2),
 

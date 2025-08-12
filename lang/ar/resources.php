@@ -168,6 +168,7 @@ return [
             'amount_placeholder' => 'أدخل مبلغ الدفع',
             'type' => 'نوع الإيصال',
             'customer_id' => 'العميل',
+            'customer_accounts' => 'حسابات العميل',
             'treasure_id' => 'الخزينة',
             'currency_id' => 'العملة',
             'invoices' => 'الفواتير المرتبطة',
@@ -199,6 +200,9 @@ return [
             'created' => 'تم إنشاء الإيصال بنجاح',
             'updated' => 'تم تحديث الإيصال بنجاح',
             'deleted' => 'تم حذف الإيصال بنجاح',
+            'no_accounts_found' => 'لا توجد حسابات لهذا العميل',
+            'credit' => 'دائن',
+            'debit' => 'مدين',
         ],
 
         // Validation
