@@ -6,9 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Account extends Model
 {
+    use LogsActivity;
+
     protected $fillable = [
         'code',
         'amount',
@@ -59,5 +62,25 @@ class Account extends Model
         $this->save();
 
         return $this;
+    }
+
+    public function getActivitylogOptions(): \Spatie\Activitylog\LogOptions
+    {
+        return \Spatie\Activitylog\LogOptions::defaults()
+            ->logOnly(['code', 'amount', 'currency_id', 'accountable_id', 'accountable_type'])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs()
+            ->setDescriptionForEvent(fn (string $eventName) => "account_{$eventName}")
+            ->useLogName('accounts');
+    }
+
+    public function getDescriptionForEvent(string $eventName): string
+    {
+        return match ($eventName) {
+            'created' => 'تم إنشاء حساب جديد',
+            'updated' => 'تم تحديث رصيد الحساب',
+            'deleted' => 'تم حذف الحساب',
+            default => "تم {$eventName} الحساب",
+        };
     }
 }

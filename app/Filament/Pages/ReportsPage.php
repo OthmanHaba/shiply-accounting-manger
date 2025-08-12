@@ -16,6 +16,11 @@ class ReportsPage extends Page
 
     protected static string $view = 'filament.pages.reports';
 
+    public static function getNavigationGroup(): ?string
+    {
+        return 'الاعدادات';
+    }
+
     protected static ?int $navigationSort = 10;
 
     public static function getNavigationLabel(): string

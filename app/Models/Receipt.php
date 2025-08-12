@@ -7,10 +7,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Receipt extends Model
 {
-    use HasFactory;
+    use HasFactory, LogsActivity;
 
     protected $fillable = [
         'type', 'amount', 'note', 'currency_id', 'customer_id', 'treasure_id',
@@ -41,5 +42,25 @@ class Receipt extends Model
     public function customer(): BelongsTo
     {
         return $this->belongsTo(Customer::class);
+    }
+
+    public function getActivitylogOptions(): \Spatie\Activitylog\LogOptions
+    {
+        return \Spatie\Activitylog\LogOptions::defaults()
+            ->logOnly(['type', 'amount', 'note', 'currency_id', 'customer_id', 'treasure_id'])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs()
+            ->setDescriptionForEvent(fn (string $eventName) => "receipt_{$eventName}")
+            ->useLogName('receipts');
+    }
+
+    public function getDescriptionForEvent(string $eventName): string
+    {
+        return match ($eventName) {
+            'created' => 'تم إنشاء إيصال جديد',
+            'updated' => 'تم تحديث الإيصال',
+            'deleted' => 'تم حذف الإيصال',
+            default => "تم {$eventName} الإيصال",
+        };
     }
 }

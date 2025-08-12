@@ -79,12 +79,18 @@ class InvoiceResource extends Resource
                             ->schema([
                                 TextInput::make('code')
                                     ->label(__('resources.invoice_resource.fields.code'))
-                                    ->default(function (TextInput $component, Set $set) {
-                                        $code = Invoice::latest()->first()?->code;
-                                        if (is_null($code)) {
-                                            return 'INV-001';
+                                    ->default(function () {
+                                        $lastInvoice = Invoice::latest()->first();
+
+                                        if (is_null($lastInvoice)) {
+                                            return 'INV-1';
                                         }
-                                        $set('code', 'INV-'.(int) $code + 1);
+
+                                        // Extract numeric part from the last invoice code
+                                        $lastCode = $lastInvoice->code;
+                                        $numericPart = (int) preg_replace('/[^0-9]/', '', $lastCode);
+
+                                        return 'INV-'.($numericPart + 1);
                                     })
                                     ->prefixIcon('heroicon-o-hashtag')
                                     ->prefixIconColor('gray')

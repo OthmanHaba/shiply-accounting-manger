@@ -28,7 +28,12 @@ class UserResource extends Resource
 
     protected static ?string $navigationLabel = 'المستخدمين';
 
-    protected static ?string $navigationGroup = 'إدارة المستخدمين';
+    //    protected static ?string $navigationGroup = __('filament-shield::filament-shield.nav.group');
+
+    public static function getNavigationGroup(): ?string
+    {
+        return __('filament-shield::filament-shield.nav.group');
+    }
 
     public static function form(Form $form): Form
     {
