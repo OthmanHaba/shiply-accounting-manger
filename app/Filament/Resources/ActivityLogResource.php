@@ -5,6 +5,11 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\ActivityLogResource\Pages;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Form;
+use Filament\Infolists\Components\Grid;
+use Filament\Infolists\Components\Section;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Components\ViewEntry;
+use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
@@ -44,6 +49,96 @@ class ActivityLogResource extends Resource
         return $form
             ->schema([
                 //
+            ]);
+    }
+
+    public static function infolist(Infolist $infolist): Infolist
+    {
+        return $infolist
+            ->schema([
+                Section::make(__('activity_log.messages.activity_log'))
+                    ->schema([
+                        Grid::make(2)
+                            ->schema([
+                                TextEntry::make('event')
+                                    ->label(__('activity_log.fields.event'))
+                                    ->formatStateUsing(fn (string $state): string => __("activity_log.events.{$state}"))
+                                    ->badge()
+                                    ->color(fn (string $state): string => match ($state) {
+                                        'created' => 'success',
+                                        'updated' => 'warning',
+                                        'deleted' => 'danger',
+                                        default => 'gray',
+                                    }),
+
+                                TextEntry::make('log_name')
+                                    ->label(__('activity_log.fields.log_name'))
+                                    ->formatStateUsing(fn (string $state): string => __("activity_log.log_names.{$state}"))
+                                    ->badge(),
+
+                                TextEntry::make('subject_type')
+                                    ->label(__('activity_log.fields.subject_type'))
+                                    ->formatStateUsing(function (?string $state): string {
+                                        if (! $state) {
+                                            return '-';
+                                        }
+
+                                        $modelName = class_basename($state);
+                                        $key = strtolower($modelName);
+
+                                        return trans("activity_log.subjects.{$key}");
+                                    }),
+
+                                TextEntry::make('subject_id')
+                                    ->label(__('activity_log.fields.subject_id'))
+                                    ->default('-'),
+
+                                TextEntry::make('causer.name')
+                                    ->label(__('activity_log.fields.causer'))
+                                    ->default(__('activity_log.messages.system')),
+
+                                TextEntry::make('created_at')
+                                    ->label(__('activity_log.fields.created_at'))
+                                    ->dateTime('d/m/Y H:i:s'),
+                            ]),
+                    ]),
+
+                Section::make(__('activity_log.fields.description'))
+                    ->schema([
+                        TextEntry::make('description')
+                            ->hiddenLabel()
+                            ->formatStateUsing(function (string $state, Activity $record): string {
+                                // Try to get custom description
+                                $key = "activity_log.activities.{$state}";
+                                $translated = __($key);
+
+                                // If translation exists, use it with replacements
+                                if ($translated !== $key) {
+                                    $replacements = [
+                                        'subject_name' => $record->subject?->name ?? $record->subject?->code ?? 'Unknown',
+                                        'subject_id' => $record->subject_id,
+                                        'amount' => $record->properties['attributes']['amount'] ?? '',
+                                    ];
+
+                                    return str_replace(
+                                        array_map(fn ($k) => ":{$k}", array_keys($replacements)),
+                                        array_values($replacements),
+                                        $translated
+                                    );
+                                }
+
+                                return $state;
+                            }),
+                    ]),
+
+                Section::make(__('activity_log.messages.changes_made'))
+                    ->schema([
+                        ViewEntry::make('changes')
+                            ->hiddenLabel()
+                            ->view('filament.infolists.activity-changes')
+                            ->viewData(fn (Activity $record) => ['activity' => $record]),
+                    ])
+                    ->visible(fn (Activity $record): bool => $record->properties->isNotEmpty()),
             ]);
     }
 
@@ -185,11 +280,92 @@ class ActivityLogResource extends Resource
             ->actions([
                 ViewAction::make()
                     ->label(__('activity_log.messages.view_details'))
-                    ->modalHeading(fn (Activity $record): string => __('activity_log.messages.activity_details')." #{$record->id}"
-                    )
-                    ->modalContent(function (Activity $record): string {
-                        return view('filament.pages.activity-details', ['activity' => $record])->render();
-                    }),
+                    ->modalHeading(fn (Activity $record): string => __('activity_log.messages.activity_details')." #{$record->id}")
+                    ->infolist([
+                        Section::make(__('activity_log.messages.activity_log'))
+                            ->schema([
+                                Grid::make(2)
+                                    ->schema([
+                                        TextEntry::make('event')
+                                            ->label(__('activity_log.fields.event'))
+                                            ->formatStateUsing(fn (string $state): string => __("activity_log.events.{$state}"))
+                                            ->badge()
+                                            ->color(fn (string $state): string => match ($state) {
+                                                'created' => 'success',
+                                                'updated' => 'warning',
+                                                'deleted' => 'danger',
+                                                default => 'gray',
+                                            }),
+
+                                        TextEntry::make('log_name')
+                                            ->label(__('activity_log.fields.log_name'))
+                                            ->formatStateUsing(fn (string $state): string => __("activity_log.log_names.{$state}"))
+                                            ->badge(),
+
+                                        TextEntry::make('subject_type')
+                                            ->label(__('activity_log.fields.subject_type'))
+                                            ->formatStateUsing(function (?string $state): string {
+                                                if (! $state) {
+                                                    return '-';
+                                                }
+
+                                                $modelName = class_basename($state);
+                                                $key = strtolower($modelName);
+
+                                                return trans("activity_log.subjects.{$key}");
+                                            }),
+
+                                        TextEntry::make('subject_id')
+                                            ->label(__('activity_log.fields.subject_id'))
+                                            ->default('-'),
+
+                                        TextEntry::make('causer.name')
+                                            ->label(__('activity_log.fields.causer'))
+                                            ->default(__('activity_log.messages.system')),
+
+                                        TextEntry::make('created_at')
+                                            ->label(__('activity_log.fields.created_at'))
+                                            ->dateTime('d/m/Y H:i:s'),
+                                    ]),
+                            ]),
+
+                        Section::make(__('activity_log.fields.description'))
+                            ->schema([
+                                TextEntry::make('description')
+                                    ->hiddenLabel()
+                                    ->formatStateUsing(function (string $state, Activity $record): string {
+                                        // Try to get custom description
+                                        $key = "activity_log.activities.{$state}";
+                                        $translated = __($key);
+
+                                        // If translation exists, use it with replacements
+                                        if ($translated !== $key) {
+                                            $replacements = [
+                                                'subject_name' => $record->subject?->name ?? $record->subject?->code ?? 'Unknown',
+                                                'subject_id' => $record->subject_id,
+                                                'amount' => $record->properties['attributes']['amount'] ?? '',
+                                            ];
+
+                                            return str_replace(
+                                                array_map(fn ($k) => ":{$k}", array_keys($replacements)),
+                                                array_values($replacements),
+                                                $translated
+                                            );
+                                        }
+
+                                        return $state;
+                                    }),
+                            ]),
+
+                        Section::make(__('activity_log.messages.changes_made'))
+                            ->schema([
+                                ViewEntry::make('changes')
+                                    ->hiddenLabel()
+                                    ->view('filament.infolists.activity-changes')
+                                    ->viewData(fn (Activity $record) => ['activity' => $record]),
+                            ])
+                            ->visible(fn (Activity $record): bool => $record->properties->isNotEmpty()),
+                    ]),
             ])
             ->defaultSort('created_at', 'desc')
             ->poll('30s');

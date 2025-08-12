@@ -63,6 +63,20 @@ class Invoice extends Model
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
-            ->logOnly(['code', 'customer_id', 'type', 'note', 'discount']);
+            ->logOnly(['code', 'customer_id', 'type', 'note', 'discount'])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs()
+            ->setDescriptionForEvent(fn (string $eventName) => "invoice_{$eventName}")
+            ->useLogName('invoices');
+    }
+
+    public function getDescriptionForEvent(string $eventName): string
+    {
+        return match ($eventName) {
+            'created' => 'تم إنشاء فاتورة جديدة',
+            'updated' => 'تم تحديث بيانات الفاتورة',
+            'deleted' => 'تم حذف الفاتورة',
+            default => "تم {$eventName} الفاتورة",
+        };
     }
 }

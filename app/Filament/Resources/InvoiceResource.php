@@ -96,7 +96,25 @@ class InvoiceResource extends Resource
                                     ->prefixIconColor('gray')
                                     ->required()
                                     ->maxLength(255)
-                                    ->unique(ignoreRecord: true),
+                                    ->unique(ignoreRecord: true)
+                                    ->disabled(fn (Get $get) => ! $get('manual_edit_code'))
+                                    ->dehydrated()
+                                    ->suffixAction(
+                                        Action::make('edit_code')
+                                            ->icon('heroicon-o-pencil')
+                                            ->tooltip('Edit invoice code manually')
+                                            ->action(function (Set $set, Get $get, $state) {
+                                                // Toggle the manual edit state
+                                                $targetValue = $get('manual_edit_code');
+                                                $set('manual_edit_code', ! $targetValue);
+                                            })
+                                    ),
+
+                                // Hidden field to track manual edit state for code
+                                TextInput::make('manual_edit_code')
+                                    ->hidden()
+                                    ->default(false)
+                                    ->dehydrated(false),
 
                                 Select::make('customer_id')
                                     ->label(__('resources.invoice_resource.fields.customer_id'))

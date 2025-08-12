@@ -135,8 +135,11 @@ return [
         'changes_made' => 'التغييرات المُجراة',
         'old_values' => 'القيم القديمة',
         'new_values' => 'القيم الجديدة',
+        'created_values' => 'القيم المُنشأة',
+        'deleted_values' => 'القيم المحذوفة',
         'activity_details' => 'تفاصيل النشاط',
         'system' => 'النظام',
+        'raw_data' => 'البيانات الخام',
     ],
 
     // Log Names
