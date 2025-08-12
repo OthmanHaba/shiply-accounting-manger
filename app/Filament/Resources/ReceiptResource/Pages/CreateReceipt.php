@@ -19,6 +19,18 @@ class CreateReceipt extends CreateRecord
         return __('resources.receipt_resource.messages.created');
     }
 
+    public function mount(): void
+    {
+        parent::mount();
+
+        // Pre-fill customer_id if provided in URL parameters
+        if (request()->has('customer_id')) {
+            $this->form->fill([
+                'customer_id' => request()->get('customer_id'),
+            ]);
+        }
+    }
+
     protected function handleRecordCreation(array $data): Model
     {
         /**

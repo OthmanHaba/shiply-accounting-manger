@@ -15,13 +15,12 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Support\Enums\FontWeight;
 use Filament\Support\Enums\IconPosition;
+use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\BulkActionGroup;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Actions\ViewAction;
-use Filament\Tables\Columns\Layout\Split as LayoutSplit;
-use Filament\Tables\Columns\Layout\Stack;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
@@ -121,27 +120,24 @@ class CustomerResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            ->columns([
-                LayoutSplit::make([
-                    Stack::make([
-                        TextColumn::make('name')
-                            ->label(__('resources.customer_resource.table.name'))
-                            ->weight(FontWeight::Bold)
-                            ->searchable()
-                            ->sortable()
-                            ->icon('heroicon-o-user')
-                            ->iconColor('primary')
-                            ->grow(false),
+            ->columns(array_merge(
+                [
+                    TextColumn::make('name')
+                        ->label(__('resources.customer_resource.table.name'))
+                        ->weight(FontWeight::Bold)
+                        ->searchable()
+                        ->sortable()
+                        ->icon('heroicon-o-user')
+                        ->iconColor('primary')
+                        ->grow(false),
 
-                        TextColumn::make('code')
-                            ->label(__('resources.customer_resource.table.code'))
-                            ->badge()
-                            ->color('gray')
-                            ->icon('heroicon-o-hashtag')
-                            ->iconPosition(IconPosition::Before)
-                            ->grow(false),
-                    ])
-                        ->space(1),
+                    TextColumn::make('code')
+                        ->label(__('resources.customer_resource.table.code'))
+                        ->badge()
+                        ->color('gray')
+                        ->icon('heroicon-o-hashtag')
+                        ->iconPosition(IconPosition::Before)
+                        ->grow(false),
 
                     TextColumn::make('phone')
                         ->label(__('resources.customer_resource.table.phone'))
@@ -151,33 +147,23 @@ class CustomerResource extends Resource
                         ->copyMessage(__('resources.customer_resource.messages.phone_copied'))
                         ->visibleFrom('md')
                         ->grow(false),
+                ],
+                collect(Currency::all())->map(function ($currency) {
+                    return TextColumn::make('account_balance_'.$currency->code)
+                        ->label($currency->code)
+                        ->badge()
+                        ->color(fn ($state) => $state > 0 ? 'success' : ($state < 0 ? 'danger' : 'gray'))
+                        ->state(function (Customer $customer) use ($currency) {
+                            $balance = $customer->accounts()
+                                ->where('currency_id', $currency->id)
+                                ->first()?->amount ?? 0;
 
-                    Stack::make(
-                        collect(Currency::all())->map(function ($currency) {
-                            return TextColumn::make('account_balance_'.$currency->code)
-                                ->label($currency->code)
-                                ->badge()
-                                ->color(fn ($state) => $state > 0 ? 'success' : ($state < 0 ? 'danger' : 'gray'))
-                                ->state(function (Customer $customer) use ($currency) {
-                                    $balance = $customer->accounts()
-                                        ->where('currency_id', $currency->id)
-                                        ->first()?->amount ?? 0;
-
-                                    return number_format($balance, 2).' '.$currency->code;
-                                })
-                                ->grow(false);
-                        })->toArray()
-                    )
-                        ->space(1)
-                        ->visibleFrom('lg')
-                        ->alignment('end'),
-                ])
-                    ->from('md'),
-            ])
-            ->contentGrid([
-                'md' => 1,
-                'xl' => 1,
-            ])
+                            return number_format($balance, 2).' '.$currency->code;
+                        })
+                        ->grow(false)
+                        ->visibleFrom('lg');
+                })->toArray()
+            ))
             ->filters([
                 //
             ])
@@ -191,6 +177,12 @@ class CustomerResource extends Resource
                 DeleteAction::make()
                     ->iconButton()
                     ->tooltip(__('resources.customer_resource.actions.delete')),
+                Action::make('add_receipt')
+                    ->label(__('resources.customer_resource.actions.add_receipt'))
+                    ->icon('heroicon-o-plus')
+                    ->color('success')
+                    ->url(fn (Customer $record) => ReceiptResource::getUrl('create', ['customer_id' => $record->id]))
+                    ->visible(fn (Customer $record) => $record->accounts()->exists()),
             ])
             ->bulkActions([
                 BulkActionGroup::make([

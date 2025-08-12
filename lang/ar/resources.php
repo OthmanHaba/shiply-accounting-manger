@@ -333,6 +333,7 @@ return [
             'edit' => 'تعديل العميل',
             'delete' => 'حذف العميل',
             'create' => 'إنشاء عميل',
+            'add_receipt' => 'إضافة إيصال',
         ],
 
         // Messages

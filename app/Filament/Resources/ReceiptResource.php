@@ -31,6 +31,8 @@ class ReceiptResource extends Resource
 
     protected static ?int $navigationSort = 3;
 
+    protected static ?string $slug = 'receipts';
+
     public static function getNavigationLabel(): string
     {
         return __('resources.receipt_resource.navigation_label');
