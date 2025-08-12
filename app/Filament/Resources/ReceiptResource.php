@@ -196,6 +196,12 @@ class ReceiptResource extends Resource
                     ->label(__('resources.receipt_resource.actions.view')),
                 Tables\Actions\EditAction::make()
                     ->label(__('resources.receipt_resource.actions.edit')),
+                Tables\Actions\Action::make('print')
+                    ->label(__('resources.receipt_resource.actions.print'))
+                    ->icon('heroicon-o-printer')
+                    ->color('info')
+                    ->url(fn (Receipt $record) => route('receipt.print', $record))
+                    ->openUrlInNewTab(),
                 Tables\Actions\DeleteAction::make()
                     ->label(__('resources.receipt_resource.actions.delete')),
             ])

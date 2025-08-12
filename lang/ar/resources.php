@@ -193,6 +193,7 @@ return [
             'edit' => 'تعديل الإيصال',
             'delete' => 'حذف الإيصال',
             'create' => 'إنشاء إيصال',
+            'print' => 'طباعة الإيصال',
         ],
 
         // Messages
@@ -203,6 +204,38 @@ return [
             'no_accounts_found' => 'لا توجد حسابات لهذا العميل',
             'credit' => 'دائن',
             'debit' => 'مدين',
+        ],
+
+        // Print translations
+        'print' => [
+            'title' => 'طباعة الإيصال',
+            'receipt_title' => 'إيصال دفع',
+            'print_button' => 'طباعة',
+            'company_info' => 'معلومات الشركة',
+            'company_name' => 'اسم الشركة',
+            'company_phone' => 'هاتف الشركة',
+            'company_email' => 'البريد الإلكتروني',
+            'company_address' => 'العنوان',
+            'receipt_info' => 'معلومات الإيصال',
+            'receipt_number' => 'رقم الإيصال',
+            'date' => 'التاريخ',
+            'type' => 'النوع',
+            'treasure' => 'الخزينة',
+            'customer_info' => 'معلومات العميل',
+            'customer_name' => 'اسم العميل',
+            'customer_code' => 'كود العميل',
+            'customer_phone' => 'هاتف العميل',
+            'not_available' => 'غير متوفر',
+            'amount_section' => 'المبلغ',
+            'amount' => 'المبلغ',
+            'notes' => 'الملاحظات',
+            'related_invoices' => 'الفواتير المرتبطة',
+            'transaction_summary' => 'ملخص العملية',
+            'operation_type' => 'نوع العملية',
+            'customer' => 'العميل',
+            'thank_you' => 'شكراً لك',
+            'generated_at' => 'تم إنشاؤه في',
+            'receipt_validity' => 'هذا الإيصال صحيح ومعتمد',
         ],
 
         // Validation
