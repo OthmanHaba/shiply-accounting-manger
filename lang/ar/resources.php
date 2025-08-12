@@ -425,4 +425,110 @@ return [
         ],
     ],
 
+    // Reports Resource
+    'reports' => [
+        'navigation_label' => 'التقارير',
+        'title' => 'التقارير المالية',
+
+        // Stats
+        'stats' => [
+            'total_receipts' => 'إجمالي الإيصالات',
+            'total_invoices' => 'إجمالي الفواتير',
+            'total_customers' => 'إجمالي العملاء',
+            'total_treasures' => 'إجمالي الخزائن',
+        ],
+
+        // Financial Reports
+        'financial_reports' => [
+            'title' => 'التقارير المالية حسب العملة',
+            'description' => 'عرض شامل للإيرادات والمصروفات والأرصدة لكل عملة',
+            'total_deposits' => 'إجمالي الإيداعات',
+            'total_withdrawals' => 'إجمالي السحوبات',
+            'net_credits' => 'صافي الرصيد',
+            'total_invoices' => 'إجمالي الفواتير',
+            'transactions' => 'معاملة',
+            'invoices' => 'فاتورة',
+            'balance' => 'الرصيد',
+        ],
+
+        // Actions
+        'actions' => [
+            'print' => 'طباعة التقرير',
+            'print_customer_deposits' => 'طباعة تقرير إيداعات العملاء',
+            'print_customer_debts' => 'طباعة تقرير ديون العملاء',
+        ],
+
+        // No Data
+        'no_data' => [
+            'title' => 'لا توجد بيانات',
+            'description' => 'لا توجد معاملات مالية للعرض في الوقت الحالي.',
+        ],
+
+        // Print translations
+        'print' => [
+            'title' => 'طباعة التقارير المالية',
+            'report_title' => 'التقرير المالي الشامل',
+            'print_button' => 'طباعة',
+            'company_phone' => 'هاتف الشركة',
+            'company_email' => 'البريد الإلكتروني',
+            'company_address' => 'العنوان',
+            'generated_at' => 'تم إنشاؤه في',
+            'report_validity' => 'هذا التقرير صحيح ومعتمد',
+        ],
+
+        // Customer Deposits Report
+        'customer_deposits' => [
+            'print' => [
+                'title' => 'تقرير إيداعات العملاء',
+                'report_title' => 'تقرير إيداعات العملاء',
+                'print_button' => 'طباعة',
+                'company_phone' => 'هاتف الشركة',
+                'company_email' => 'البريد الإلكتروني',
+                'company_address' => 'العنوان',
+                'customer_code' => 'كود العميل',
+                'customer_phone' => 'هاتف العميل',
+                'not_available' => 'غير متوفر',
+                'currency' => 'العملة',
+                'total_deposits' => 'إجمالي الإيداعات',
+                'transactions_count' => 'عدد المعاملات',
+                'no_deposits_found' => 'لا توجد إيداعات للعملاء',
+                'summary_title' => 'ملخص الإيداعات حسب العملة',
+                'total_for_currency' => 'إجمالي :currency',
+                'customers' => 'عميل',
+                'generated_at' => 'تم إنشاؤه في',
+                'report_validity' => 'هذا التقرير صحيح ومعتمد',
+            ],
+        ],
+
+        // Customer Debts Report
+        'customer_debts' => [
+            'print' => [
+                'title' => 'تقرير ديون العملاء',
+                'report_title' => 'تقرير ديون العملاء',
+                'print_button' => 'طباعة',
+                'company_phone' => 'هاتف الشركة',
+                'company_email' => 'البريد الإلكتروني',
+                'company_address' => 'العنوان',
+                'customer_code' => 'كود العميل',
+                'customer_phone' => 'هاتف العميل',
+                'not_available' => 'غير متوفر',
+                'account_id' => 'رقم الحساب',
+                'currency' => 'العملة',
+                'account_balance' => 'رصيد الحساب',
+                'debt_amount' => 'مبلغ الدين',
+                'customer_total_debts' => 'إجمالي ديون العميل',
+                'total_debt' => 'إجمالي الدين',
+                'no_debts_title' => 'لا توجد ديون',
+                'no_debts_found' => 'لا يوجد عملاء لديهم ديون في الوقت الحالي',
+                'summary_title' => 'ملخص الديون حسب العملة',
+                'total_debt_for_currency' => 'إجمالي الديون بعملة :currency',
+                'customers_with_debt' => 'عميل مدين',
+                'important_note' => 'ملاحظة مهمة',
+                'debt_explanation' => 'الأرصدة السالبة تمثل ديون العملاء للشركة',
+                'generated_at' => 'تم إنشاؤه في',
+                'report_validity' => 'هذا التقرير صحيح ومعتمد',
+            ],
+        ],
+    ],
+
 ];
