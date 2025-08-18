@@ -4,152 +4,334 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ __('resources.invoice_resource.print.title') }} - {{ $invoice->code }}</title>
-    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: white;
+            color: black;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .invoice-container {
+            max-width: 800px;
+            margin: 0 auto;
+            border: 1px solid #000;
+            padding: 20px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #000;
+            padding-bottom: 20px;
+        }
+
+        .company-info {
+            flex: 1;
+        }
+
+        .company-info h1 {
+            margin: 0 0 10px 0;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .company-info p {
+            margin: 5px 0;
+            font-size: 12px;
+        }
+
+        .logo {
+            width: 100px;
+            height: auto;
+            margin-left: 20px;
+        }
+
+        .invoice-title {
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            margin: 20px 0;
+            text-transform: uppercase;
+        }
+
+        .invoice-details {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
+
+        .invoice-info, .customer-info {
+            flex: 1;
+            padding: 15px;
+            border: 1px solid #000;
+            margin: 0 5px;
+        }
+
+        .info-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-align: center;
+            border-bottom: 1px solid #000;
+            padding-bottom: 10px;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            border-bottom: 1px dotted #ccc;
+            padding-bottom: 5px;
+        }
+
+        .detail-label {
+            font-weight: bold;
+            min-width: 120px;
+        }
+
+        .detail-value {
+            flex: 1;
+            text-align: right;
+        }
+
+        .items-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        .items-table th,
+        .items-table td {
+            border: 1px solid #000;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .items-table th {
+            background: #f0f0f0;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .items-table .text-center {
+            text-align: center;
+        }
+
+        .items-table .text-right {
+            text-align: right;
+        }
+
+        .totals-section {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 30px;
+        }
+
+        .totals-box {
+            border: 2px solid #000;
+            padding: 20px;
+            min-width: 300px;
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            border-bottom: 1px dotted #ccc;
+        }
+
+        .total-row:last-child {
+            border-bottom: 2px solid #000;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .notes {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #000;
+            background: #f9f9f9;
+        }
+
+        .notes-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #000;
+            font-size: 12px;
         }
 
         @media print {
+            .no-print {
+                display: none !important;
+            }
+
             body {
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
             }
 
-            .no-print {
-                display: none !important;
+            .invoice-container {
+                border: 1px solid #000;
+                box-shadow: none;
             }
 
-            .print-page {
-                page-break-after: always;
+            @page {
+                size: A4;
+                margin: 1cm;
             }
+        }
 
-            .print-page:last-child {
-                page-break-after: avoid;
-            }
+        .print-button {
+            background: #000;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+
+        .print-button:hover {
+            background: #333;
         }
     </style>
 </head>
-<body class="bg-white text-gray-800 text-sm">
-<div class="max-w-4xl mx-auto p-6">
+<body>
     <!-- Print Button -->
-    <div class="no-print mb-4">
-        <button onclick="window.print()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">
+    <div class="no-print">
+        <button onclick="window.print()" class="print-button">
             {{ __('resources.invoice_resource.print.print_button') }}
         </button>
     </div>
 
-    <!-- Header with Company and Customer Info -->
-    <div class="border-b-2 border-gray-200 pb-6 mb-6">
-        <div class="flex justify-between items-start">
-            <!-- Company Information (Left) -->
-            <div class="w-1/2">
-                <h1 class="text-2xl font-bold text-gray-900 mb-4">{{ __('resources.invoice_resource.print.invoice_title') }}</h1>
-                <div class="bg-gray-50 p-4 rounded">
-                    <h2 class="text-lg font-semibold mb-3 text-gray-900">{{ __('resources.invoice_resource.print.company_info') }}</h2>
-                    <div class="space-y-2">
-                        <p><span class="font-medium">{{ __('resources.invoice_resource.print.company_name') }}:</span> {{ $companyInfo['name'] }}</p>
-                        <p><span class="font-medium">{{ __('resources.invoice_resource.print.company_phone') }}:</span> {{ $companyInfo['phone'] }}</p>
-                        <p><span class="font-medium">{{ __('resources.invoice_resource.print.company_email') }}:</span> {{ $companyInfo['email'] }}</p>
-                        <p><span class="font-medium">{{ __('resources.invoice_resource.print.company_address') }}:</span> {{ $companyInfo['address'] }}</p>
-                        <p><span class="font-medium">{{ __('resources.invoice_resource.print.company_website') }}:</span> {{ $companyInfo['website'] }}</p>
-                    </div>
-                </div>
+    <div class="invoice-container">
+        <!-- Header with Company Info and Logo -->
+        <div class="header">
+            <div class="company-info">
+                <h1>{{ $companyInfo['name'] }}</h1>
+                <p>{{ __('resources.invoice_resource.print.company_phone') }}: {{ $companyInfo['phone'] }}</p>
+                <p>{{ __('resources.invoice_resource.print.company_email') }}: {{ $companyInfo['email'] }}</p>
+                <p>{{ __('resources.invoice_resource.print.company_address') }}: {{ $companyInfo['address'] }}</p>
+                @if(isset($companyInfo['website']))
+                    <p>{{ __('resources.invoice_resource.print.company_website') }}: {{ $companyInfo['website'] }}</p>
+                @endif
             </div>
-
-            <!-- Customer Information (Right) -->
-            <div class="w-1/2 {{ app()->getLocale() === 'ar' ? 'mr-6' : 'ml-6' }}">
-                <div class="text-right mb-4">
-                    <p class="text-gray-600">{{ __('resources.invoice_resource.print.invoice_code') }}: {{ $invoice->code }}</p>
-                    <p class="text-gray-600">{{ __('resources.invoice_resource.print.date') }}: {{ $invoice->created_at->format('Y-m-d') }}</p>
-                    <p class="text-gray-600">{{ __('resources.invoice_resource.print.type') }}: {{ $invoice->type->getLabel() }}</p>
-                </div>
-
-                <div class="bg-gray-50 p-4 rounded">
-                    <h2 class="text-lg font-semibold mb-3 text-gray-900">{{ __('resources.invoice_resource.print.customer_info') }}</h2>
-                    <div class="space-y-2">
-                        <p><span class="font-medium">{{ __('resources.invoice_resource.print.customer_name') }}:</span> {{ $invoice->customer->name }}</p>
-                        <p><span class="font-medium">{{ __('resources.invoice_resource.print.customer_code') }}:</span> {{ $invoice->customer->code }}</p>
-                        <p><span class="font-medium">{{ __('resources.invoice_resource.print.customer_phone') }}:</span> {{ $invoice->customer->phone ?? __('resources.invoice_resource.print.not_available') }}</p>
-                    </div>
-                </div>
+            <div class="logo-section">
+                <img src="{{ asset('img/logo.jpg') }}" alt="Logo" class="logo">
             </div>
         </div>
-    </div>
 
-    <!-- Notes (if exists) -->
-    @if($invoice->notes)
-        <div class="mb-6">
-            <h2 class="text-lg font-semibold mb-3 text-gray-900">{{ __('resources.invoice_resource.print.notes') }}</h2>
-            <div class="bg-yellow-50 border border-yellow-200 p-4 rounded">
-                <p class="text-gray-700">{{ $invoice->notes }}</p>
+        <!-- Invoice Title -->
+        <div class="invoice-title">
+            {{ __('resources.invoice_resource.print.invoice_title') }}
+        </div>
+
+        <!-- Invoice and Customer Details -->
+        <div class="invoice-details">
+            <div class="invoice-info">
+                <div class="info-title">{{ __('resources.invoice_resource.print.invoice_info') }}</div>
+                <div class="detail-row">
+                    <span class="detail-label">{{ __('resources.invoice_resource.print.invoice_code') }}:</span>
+                    <span class="detail-value">{{ $invoice->code }}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">{{ __('resources.invoice_resource.print.date') }}:</span>
+                    <span class="detail-value">{{ $invoice->created_at->format('Y-m-d') }}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">{{ __('resources.invoice_resource.print.type') }}:</span>
+                    <span class="detail-value">{{ $invoice->type->getLabel() }}</span>
+                </div>
+            </div>
+
+            <div class="customer-info">
+                <div class="info-title">{{ __('resources.invoice_resource.print.customer_info') }}</div>
+                <div class="detail-row">
+                    <span class="detail-label">{{ __('resources.invoice_resource.print.customer_name') }}:</span>
+                    <span class="detail-value">{{ $invoice->customer->name }}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">{{ __('resources.invoice_resource.print.customer_code') }}:</span>
+                    <span class="detail-value">{{ $invoice->customer->code }}</span>
+                </div>
+                @if($invoice->customer->phone)
+                <div class="detail-row">
+                    <span class="detail-label">{{ __('resources.invoice_resource.print.customer_phone') }}:</span>
+                    <span class="detail-value">{{ $invoice->customer->phone }}</span>
+                </div>
+                @endif
             </div>
         </div>
-    @endif
 
-    <!-- Invoice Items -->
-    <div class="mb-6">
-        <h2 class="text-lg font-semibold mb-3 text-gray-900">{{ __('resources.invoice_resource.print.items') }}</h2>
-        <div class="overflow-x-auto">
-            <table class="w-full border-collapse border border-gray-300">
-                <thead>
-                <tr class="bg-gray-100">
-                    <th class="border border-gray-300 px-4 py-2 text-left">#</th>
-                    <th class="border border-gray-300 px-4 py-2 text-left">{{ __('resources.invoice_resource.print.item_name') }}</th>
-                    <th class="border border-gray-300 px-4 py-2 text-center">{{ __('resources.invoice_resource.print.quantity') }}</th>
-                    <th class="border border-gray-300 px-4 py-2 text-right">{{ __('resources.invoice_resource.print.price') }}</th>
-                    <th class="border border-gray-300 px-4 py-2 text-right">{{ __('resources.invoice_resource.print.total') }}</th>
+        <!-- Notes (if exists) -->
+        @if($invoice->notes)
+        <div class="notes">
+            <div class="notes-title">{{ __('resources.invoice_resource.print.notes') }}:</div>
+            {{ $invoice->notes }}
+        </div>
+        @endif
+
+        <!-- Invoice Items -->
+        <table class="items-table">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>{{ __('resources.invoice_resource.print.item_name') }}</th>
+                <th>{{ __('resources.invoice_resource.print.quantity') }}</th>
+                <th>{{ __('resources.invoice_resource.print.price') }}</th>
+                <th>{{ __('resources.invoice_resource.print.total') }}</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach($invoice->items as $index => $item)
+                <tr>
+                    <td class="text-center">{{ $index + 1 }}</td>
+                    <td>{{ $item->item->name }}</td>
+                    <td class="text-center">{{ $item->item_count }}</td>
+                    <td class="text-right">{{ number_format($item->unit_price, 2) }}</td>
+                    <td class="text-right">{{ number_format($item->total_price, 2) }}</td>
                 </tr>
-                </thead>
-                <tbody>
-                @foreach($invoice->items as $index => $item)
-                    <tr>
-                        <td class="border border-gray-300 px-4 py-2">{{ $index + 1 }}</td>
-                        <td class="border border-gray-300 px-4 py-2">{{ $item->item->name }}</td>
-                        <td class="border border-gray-300 px-4 py-2 text-center">{{ $item->item_count }}</td>
-                        <td class="border border-gray-300 px-4 py-2 text-right">{{ number_format($item->unit_price, 2) }}</td>
-                        <td class="border border-gray-300 px-4 py-2 text-right">{{ number_format($item->total_price, 2) }}</td>
-                    </tr>
+            @endforeach
+            </tbody>
+        </table>
+
+        <!-- Invoice Totals -->
+        <div class="totals-section">
+            <div class="totals-box">
+                @foreach($invoice->invoicePrices as $price)
+                    <div class="total-row">
+                        <span>{{ __('resources.invoice_resource.print.total') }} ({{ $price->currency->code }}):</span>
+                        <span>{{ number_format($price->total_price, 2) }} {{ $price->currency->code }}</span>
+                    </div>
                 @endforeach
-                </tbody>
-            </table>
-        </div>
-    </div>
 
-    <!-- Invoice Totals -->
-    <div class="mb-6">
-        <div class="flex justify-end">
-            <div class="w-64">
-                <div class="bg-gray-50 p-4 rounded border">
-                    <h3 class="text-lg font-semibold mb-3 text-gray-900">{{ __('resources.invoice_resource.print.total') }}</h3>
-                    @foreach($invoice->invoicePrices as $price)
-                        <div class="flex justify-between py-2 border-b border-gray-200">
-                            <span class="font-medium">{{ __('resources.invoice_resource.print.total') }} ({{ $price->currency->code }}):</span>
-                            <span class="font-semibold">{{ number_format($price->total, 2) }} {{ $price->currency->code }}</span>
-                        </div>
-                    @endforeach
-
-                    @if($invoice->discount > 0)
-                        <div class="flex justify-between py-2 text-red-600">
-                            <span class="font-medium">{{ __('resources.invoice_resource.print.discount') }}:</span>
-                            <span class="font-semibold">-{{ number_format($invoice->discount, 2) }}</span>
-                        </div>
-                    @endif
-                </div>
+                @if($invoice->discount > 0)
+                    <div class="total-row" style="color: red;">
+                        <span>{{ __('resources.invoice_resource.print.discount') }}:</span>
+                        <span>-{{ number_format($invoice->discount, 2) }}</span>
+                    </div>
+                @endif
             </div>
         </div>
-    </div>
 
-    <!-- Footer -->
-    <div class="border-t-2 border-gray-200 pt-4 mt-8">
-        <div class="text-center text-gray-600">
-            <p class="text-lg">{{ __('resources.invoice_resource.print.thank_you') }}</p>
-            <p class="text-xs mt-2">{{ __('resources.invoice_resource.print.generated_at') }}: {{ now()->format('Y-m-d H:i:s') }}</p>
+        <!-- Footer -->
+        <div class="footer">
+            <p>{{ __('resources.invoice_resource.print.thank_you') }}</p>
+            <p>{{ __('resources.invoice_resource.print.generated_at') }}: {{ now()->format('Y-m-d H:i:s') }}</p>
         </div>
     </div>
-</div>
 
 <script>
     // Auto-focus for print shortcut
