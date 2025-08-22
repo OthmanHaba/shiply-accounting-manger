@@ -54,7 +54,6 @@ class CreateInvoice extends CreateRecord
             }
         }
 
-
         if (isset($data['prices'])) {
             foreach ($data['prices'] as $currencyId => $price) {
                 $cleanPrice = (float) str_replace(',', '', $price);
@@ -66,7 +65,6 @@ class CreateInvoice extends CreateRecord
                 }
             }
         }
-
 
         return $invoice;
     }

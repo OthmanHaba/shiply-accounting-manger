@@ -502,7 +502,7 @@ class InvoiceResource extends Resource
 
     public static function getGloballySearchableAttributes(): array
     {
-        return ['customer.name', 'notes', 'type'];
+        return ['customer.name', 'note', 'type'];
     }
 
     public static function getNavigationBadge(): ?string

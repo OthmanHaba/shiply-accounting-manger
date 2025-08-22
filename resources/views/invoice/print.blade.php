@@ -209,129 +209,125 @@
     </style>
 </head>
 <body>
-    <!-- Print Button -->
-    <div class="no-print">
-        <button onclick="window.print()" class="print-button">
-            {{ __('resources.invoice_resource.print.print_button') }}
-        </button>
+<!-- Print Button -->
+<div class="no-print">
+    <button onclick="window.print()" class="print-button">
+        {{ __('resources.invoice_resource.print.print_button') }}
+    </button>
+</div>
+
+<div class="invoice-container">
+    <!-- Header with Company Info and Logo -->
+    <div class="header">
+        <div class="company-info">
+            <h1>{{ $companyInfo['name'] }}</h1>
+            <p>{{ __('resources.invoice_resource.print.company_phone') }}: {{ $companyInfo['phone'] }}</p>
+            <p>{{ __('resources.invoice_resource.print.company_address') }}: {{ $companyInfo['address'] }}</p>
+        </div>
+        <div class="logo-section">
+            <img src="{{ asset('img/logo.jpg') }}" alt="Logo" class="logo">
+        </div>
     </div>
 
-    <div class="invoice-container">
-        <!-- Header with Company Info and Logo -->
-        <div class="header">
-            <div class="company-info">
-                <h1>{{ $companyInfo['name'] }}</h1>
-                <p>{{ __('resources.invoice_resource.print.company_phone') }}: {{ $companyInfo['phone'] }}</p>
-                <p>{{ __('resources.invoice_resource.print.company_email') }}: {{ $companyInfo['email'] }}</p>
-                <p>{{ __('resources.invoice_resource.print.company_address') }}: {{ $companyInfo['address'] }}</p>
-                @if(isset($companyInfo['website']))
-                    <p>{{ __('resources.invoice_resource.print.company_website') }}: {{ $companyInfo['website'] }}</p>
-                @endif
+    <!-- Invoice Title -->
+    <div class="invoice-title">
+        {{ __('resources.invoice_resource.print.invoice_title') }}
+    </div>
+
+    <!-- Invoice and Customer Details -->
+    <div class="invoice-details">
+        <div class="invoice-info">
+            <div class="info-title">{{ __('resources.invoice_resource.print.invoice_info') }}</div>
+            <div class="detail-row">
+                <span class="detail-label">{{ __('resources.invoice_resource.print.invoice_code') }}:</span>
+                <span class="detail-value">{{ $invoice->code }}</span>
             </div>
-            <div class="logo-section">
-                <img src="{{ asset('img/logo.jpg') }}" alt="Logo" class="logo">
+            <div class="detail-row">
+                <span class="detail-label">{{ __('resources.invoice_resource.print.date') }}:</span>
+                <span class="detail-value">{{ $invoice->created_at->format('Y-m-d') }}</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">{{ __('resources.invoice_resource.print.type') }}:</span>
+                <span class="detail-value">{{ $invoice->type->getLabel() }}</span>
             </div>
         </div>
 
-        <!-- Invoice Title -->
-        <div class="invoice-title">
-            {{ __('resources.invoice_resource.print.invoice_title') }}
-        </div>
-
-        <!-- Invoice and Customer Details -->
-        <div class="invoice-details">
-            <div class="invoice-info">
-                <div class="info-title">{{ __('resources.invoice_resource.print.invoice_info') }}</div>
-                <div class="detail-row">
-                    <span class="detail-label">{{ __('resources.invoice_resource.print.invoice_code') }}:</span>
-                    <span class="detail-value">{{ $invoice->code }}</span>
-                </div>
-                <div class="detail-row">
-                    <span class="detail-label">{{ __('resources.invoice_resource.print.date') }}:</span>
-                    <span class="detail-value">{{ $invoice->created_at->format('Y-m-d') }}</span>
-                </div>
-                <div class="detail-row">
-                    <span class="detail-label">{{ __('resources.invoice_resource.print.type') }}:</span>
-                    <span class="detail-value">{{ $invoice->type->getLabel() }}</span>
-                </div>
+        <div class="customer-info">
+            <div class="info-title">{{ __('resources.invoice_resource.print.customer_info') }}</div>
+            <div class="detail-row">
+                <span class="detail-label">{{ __('resources.invoice_resource.print.customer_name') }}:</span>
+                <span class="detail-value">{{ $invoice->customer->name }}</span>
             </div>
-
-            <div class="customer-info">
-                <div class="info-title">{{ __('resources.invoice_resource.print.customer_info') }}</div>
-                <div class="detail-row">
-                    <span class="detail-label">{{ __('resources.invoice_resource.print.customer_name') }}:</span>
-                    <span class="detail-value">{{ $invoice->customer->name }}</span>
-                </div>
-                <div class="detail-row">
-                    <span class="detail-label">{{ __('resources.invoice_resource.print.customer_code') }}:</span>
-                    <span class="detail-value">{{ $invoice->customer->code }}</span>
-                </div>
-                @if($invoice->customer->phone)
+            <div class="detail-row">
+                <span class="detail-label">{{ __('resources.invoice_resource.print.customer_code') }}:</span>
+                <span class="detail-value">{{ $invoice->customer->code }}</span>
+            </div>
+            @if($invoice->customer->phone)
                 <div class="detail-row">
                     <span class="detail-label">{{ __('resources.invoice_resource.print.customer_phone') }}:</span>
                     <span class="detail-value">{{ $invoice->customer->phone }}</span>
                 </div>
-                @endif
-            </div>
+            @endif
         </div>
+    </div>
 
-        <!-- Notes (if exists) -->
-        @if($invoice->notes)
+    <!-- Notes (if exists) -->
+    @if($invoice->notes)
         <div class="notes">
             <div class="notes-title">{{ __('resources.invoice_resource.print.notes') }}:</div>
             {{ $invoice->notes }}
         </div>
-        @endif
+    @endif
 
-        <!-- Invoice Items -->
-        <table class="items-table">
-            <thead>
+    <!-- Invoice Items -->
+    <table class="items-table">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>{{ __('resources.invoice_resource.print.item_name') }}</th>
+            <th>{{ __('resources.invoice_resource.print.quantity') }}</th>
+            <th>{{ __('resources.invoice_resource.print.price') }}</th>
+            <th>{{ __('resources.invoice_resource.print.total') }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach($invoice->items as $index => $item)
             <tr>
-                <th>#</th>
-                <th>{{ __('resources.invoice_resource.print.item_name') }}</th>
-                <th>{{ __('resources.invoice_resource.print.quantity') }}</th>
-                <th>{{ __('resources.invoice_resource.print.price') }}</th>
-                <th>{{ __('resources.invoice_resource.print.total') }}</th>
+                <td class="text-center">{{ $index + 1 }}</td>
+                <td>{{ $item->item->name }}</td>
+                <td class="text-center">{{ $item->item_count }}</td>
+                <td class="text-right">{{ number_format($item->unit_price, 2) }}</td>
+                <td class="text-right">{{ number_format($item->total_price, 2) }}</td>
             </tr>
-            </thead>
-            <tbody>
-            @foreach($invoice->items as $index => $item)
-                <tr>
-                    <td class="text-center">{{ $index + 1 }}</td>
-                    <td>{{ $item->item->name }}</td>
-                    <td class="text-center">{{ $item->item_count }}</td>
-                    <td class="text-right">{{ number_format($item->unit_price, 2) }}</td>
-                    <td class="text-right">{{ number_format($item->total_price, 2) }}</td>
-                </tr>
+        @endforeach
+        </tbody>
+    </table>
+
+    <!-- Invoice Totals -->
+    <div class="totals-section">
+        <div class="totals-box">
+            @foreach($invoice->invoicePrices as $price)
+                <div class="total-row">
+                    <span>{{ __('resources.invoice_resource.print.total') }} ({{ $price->currency->code }}):</span>
+                    <span>{{ number_format($price->total_price, 2) }} {{ $price->currency->code }}</span>
+                </div>
             @endforeach
-            </tbody>
-        </table>
 
-        <!-- Invoice Totals -->
-        <div class="totals-section">
-            <div class="totals-box">
-                @foreach($invoice->invoicePrices as $price)
-                    <div class="total-row">
-                        <span>{{ __('resources.invoice_resource.print.total') }} ({{ $price->currency->code }}):</span>
-                        <span>{{ number_format($price->total_price, 2) }} {{ $price->currency->code }}</span>
-                    </div>
-                @endforeach
-
-                @if($invoice->discount > 0)
-                    <div class="total-row" style="color: red;">
-                        <span>{{ __('resources.invoice_resource.print.discount') }}:</span>
-                        <span>-{{ number_format($invoice->discount, 2) }}</span>
-                    </div>
-                @endif
-            </div>
-        </div>
-
-        <!-- Footer -->
-        <div class="footer">
-            <p>{{ __('resources.invoice_resource.print.thank_you') }}</p>
-            <p>{{ __('resources.invoice_resource.print.generated_at') }}: {{ now()->format('Y-m-d H:i:s') }}</p>
+            @if($invoice->discount > 0)
+                <div class="total-row" style="color: red;">
+                    <span>{{ __('resources.invoice_resource.print.discount') }}:</span>
+                    <span>-{{ number_format($invoice->discount, 2) }}</span>
+                </div>
+            @endif
         </div>
     </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p>{{ __('resources.invoice_resource.print.thank_you') }}</p>
+        <p>{{ __('resources.invoice_resource.print.generated_at') }}: {{ now()->format('Y-m-d H:i:s') }}</p>
+    </div>
+</div>
 
 <script>
     // Auto-focus for print shortcut

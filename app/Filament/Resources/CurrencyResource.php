@@ -158,7 +158,7 @@ class CurrencyResource extends Resource
 
     public static function getGloballySearchableAttributes(): array
     {
-        return ['name', 'code', 'symbol'];
+        return ['name', 'code'];
     }
 
     public static function getNavigationBadge(): ?string

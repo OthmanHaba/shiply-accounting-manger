@@ -55,8 +55,9 @@ class CreateReceipt extends CreateRecord
         $treasury = Treasure::find($data['treasure_id']);
 
         // Handle account transactions based on receipt type
+
         // قبض
-        if ($data['type'] == ReceiptType::WITHDRAWAL->value) {
+        if ($data['type'] == ReceiptType::DEPOSIT->value) {
             $account = $customer->accounts()->where('currency_id', $data['currency_id'])->first();
             if ($account) {
                 $account->deposit($data['amount']);
@@ -64,8 +65,8 @@ class CreateReceipt extends CreateRecord
             }
         }
 
-        // صرف
-        if ($data['type'] == ReceiptType::DEPOSIT->value) {
+        //  صرف
+        if ($data['type'] == ReceiptType::WITHDRAWAL->value) {
             $account = $customer->accounts()->where('currency_id', $data['currency_id'])->first();
             if ($account) {
                 $account->deposit($data['amount']);

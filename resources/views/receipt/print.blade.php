@@ -141,88 +141,87 @@
     </style>
 </head>
 <body>
-    <!-- Print Button -->
-    <div class="no-print">
-        <button onclick="window.print()" class="print-button">
-            {{ __('resources.receipt_resource.print.print_button') }}
-        </button>
+<!-- Print Button -->
+<div class="no-print">
+    <button onclick="window.print()" class="print-button">
+        {{ __('resources.receipt_resource.print.print_button') }}
+    </button>
+</div>
+
+<div class="receipt-container">
+    <!-- Header with Company Info and Logo -->
+    <div class="header">
+        <div class="company-info">
+            <h1>{{ $companyInfo['name'] }}</h1>
+            <p>{{ __('resources.receipt_resource.print.company_phone') }}: {{ $companyInfo['phone'] }}</p>
+            <p>{{ __('resources.receipt_resource.print.company_address') }}: {{ $companyInfo['address'] }}</p>
+        </div>
+        <div class="logo-section">
+            <img src="{{ asset('img/logo.jpg') }}" alt="Logo" class="logo">
+        </div>
     </div>
 
-    <div class="receipt-container">
-        <!-- Header with Company Info and Logo -->
-        <div class="header">
-            <div class="company-info">
-                <h1>{{ $companyInfo['name'] }}</h1>
-                <p>{{ __('resources.receipt_resource.print.company_phone') }}: {{ $companyInfo['phone'] }}</p>
-                <p>{{ __('resources.receipt_resource.print.company_email') }}: {{ $companyInfo['email'] }}</p>
-                <p>{{ __('resources.receipt_resource.print.company_address') }}: {{ $companyInfo['address'] }}</p>
-            </div>
-            <div class="logo-section">
-                <img src="{{ asset('img/logo.jpg') }}" alt="Logo" class="logo">
-            </div>
+    <!-- Receipt Title -->
+    <div class="receipt-title">
+        {!! __('resources.receipt_resource.print.receipt_title') . ($receipt->type !== \App\Enums\ReceiptType::DEPOSIT ? 'صرف' : 'قبض') !!}
+    </div>
+
+    <!-- Receipt Details -->
+    <div class="receipt-details">
+        <div class="detail-row">
+            <span class="detail-label">{{ __('resources.receipt_resource.print.receipt_number') }}:</span>
+            <span class="detail-value">#{{ $receipt->id }}</span>
         </div>
 
-        <!-- Receipt Title -->
-        <div class="receipt-title">
-            {{ __('resources.receipt_resource.print.receipt_title') }}
+        <div class="detail-row">
+            <span class="detail-label">{{ __('resources.receipt_resource.print.date') }}:</span>
+            <span class="detail-value">{{ $receipt->created_at->format('Y-m-d H:i') }}</span>
         </div>
 
-        <!-- Receipt Details -->
-        <div class="receipt-details">
-            <div class="detail-row">
-                <span class="detail-label">{{ __('resources.receipt_resource.print.receipt_number') }}:</span>
-                <span class="detail-value">#{{ $receipt->id }}</span>
-            </div>
+        <div class="detail-row">
+            <span class="detail-label">{{ __('resources.receipt_resource.print.type') }}:</span>
+            <span class="detail-value">{{ $receipt->type->getLabel() }}</span>
+        </div>
 
-            <div class="detail-row">
-                <span class="detail-label">{{ __('resources.receipt_resource.print.date') }}:</span>
-                <span class="detail-value">{{ $receipt->created_at->format('Y-m-d H:i') }}</span>
-            </div>
+        <div class="detail-row">
+            <span class="detail-label">{{ __('resources.receipt_resource.print.customer_name') }}:</span>
+            <span class="detail-value">{{ $receipt->customer->name }}</span>
+        </div>
 
-            <div class="detail-row">
-                <span class="detail-label">{{ __('resources.receipt_resource.print.type') }}:</span>
-                <span class="detail-value">{{ $receipt->type->getLabel() }}</span>
-            </div>
+        <div class="detail-row">
+            <span class="detail-label">{{ __('resources.receipt_resource.print.customer_code') }}:</span>
+            <span class="detail-value">{{ $receipt->customer->code }}</span>
+        </div>
 
-            <div class="detail-row">
-                <span class="detail-label">{{ __('resources.receipt_resource.print.customer_name') }}:</span>
-                <span class="detail-value">{{ $receipt->customer->name }}</span>
-            </div>
-
-            <div class="detail-row">
-                <span class="detail-label">{{ __('resources.receipt_resource.print.customer_code') }}:</span>
-                <span class="detail-value">{{ $receipt->customer->code }}</span>
-            </div>
-
-            @if($receipt->customer->phone)
+        @if($receipt->customer->phone)
             <div class="detail-row">
                 <span class="detail-label">{{ __('resources.receipt_resource.print.customer_phone') }}:</span>
                 <span class="detail-value">{{ $receipt->customer->phone }}</span>
             </div>
-            @endif
+        @endif
 
-            <div class="detail-row">
-                <span class="detail-label">{{ __('resources.receipt_resource.print.treasure') }}:</span>
-                <span class="detail-value">{{ $receipt->treasure->name }}</span>
-            </div>
+        <div class="detail-row">
+            <span class="detail-label">{{ __('resources.receipt_resource.print.treasure') }}:</span>
+            <span class="detail-value">{{ $receipt->treasure->name }}</span>
         </div>
+    </div>
 
-        <!-- Amount Section -->
-        <div class="amount-section">
-            <div>{{ __('resources.receipt_resource.print.amount') }}</div>
-            <div class="amount-value">{{ number_format($receipt->amount, 2) }} {{ $receipt->currency->code }}</div>
-        </div>
+    <!-- Amount Section -->
+    <div class="amount-section">
+        <div>{{ __('resources.receipt_resource.print.amount') }}</div>
+        <div class="amount-value">{{ number_format($receipt->amount, 2) }} {{ $receipt->currency->code }}</div>
+    </div>
 
-        <!-- Notes -->
-        @if($receipt->note)
+    <!-- Notes -->
+    @if($receipt->note)
         <div class="notes">
             <strong>{{ __('resources.receipt_resource.print.notes') }}:</strong><br>
             {{ $receipt->note }}
         </div>
-        @endif
+    @endif
 
-        <!-- Related Invoices -->
-        @if($receipt->invoices->count() > 0)
+    <!-- Related Invoices -->
+    @if($receipt->invoices->count() > 0)
         <div class="detail-row">
             <span class="detail-label">{{ __('resources.receipt_resource.print.related_invoices') }}:</span>
             <span class="detail-value">
@@ -231,23 +230,23 @@
                 @endforeach
             </span>
         </div>
-        @endif
+    @endif
 
-        <!-- Footer -->
-        <div class="footer">
-            <p>{{ __('resources.receipt_resource.print.thank_you') }}</p>
-            <p>{{ __('resources.receipt_resource.print.generated_at') }}: {{ now()->format('Y-m-d H:i:s') }}</p>
-        </div>
+    <!-- Footer -->
+    <div class="footer">
+        <p>{{ __('resources.receipt_resource.print.thank_you') }}</p>
+        <p>{{ __('resources.receipt_resource.print.generated_at') }}: {{ now()->format('Y-m-d H:i:s') }}</p>
     </div>
+</div>
 
-    <script>
-        // Auto-focus for print shortcut
-        document.addEventListener('keydown', function (e) {
-            if (e.ctrlKey && e.key === 'p') {
-                e.preventDefault();
-                window.print();
-            }
-        });
-    </script>
+<script>
+    // Auto-focus for print shortcut
+    document.addEventListener('keydown', function (e) {
+        if (e.ctrlKey && e.key === 'p') {
+            e.preventDefault();
+            window.print();
+        }
+    });
+</script>
 </body>
 </html>

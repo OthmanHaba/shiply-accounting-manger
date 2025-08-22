@@ -209,7 +209,7 @@ return [
         // Print translations
         'print' => [
             'title' => 'طباعة الإيصال',
-            'receipt_title' => 'إيصال دفع',
+            'receipt_title' => 'إيصال ',
             'print_button' => 'طباعة',
             'company_info' => 'معلومات الشركة',
             'company_name' => 'اسم الشركة',

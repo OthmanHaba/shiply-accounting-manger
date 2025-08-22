@@ -2,7 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Enums\SettingKyeTypeEnum;
 use App\Models\Currency;
+use App\Models\Setting;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -14,16 +16,19 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
         User::factory()->create([
-            'name' => 'Test User',
+            'name' => 'Super Admin',
             'email' => 'admin@admin.com',
         ]);
 
         Currency::insert([
-            ['code' => 'LYD', 'name' => 'Libyan dinar'],
-            ['code' => 'EUR', 'name' => 'Euro'],
+            ['code' => 'LYD', 'name' => 'دينار ليبي'],
+            ['code' => 'EUR', 'name' => 'يورو'],
+        ]);
+
+        Setting::insert([
+            ['key' => 'company_phone', 'value' => '', 'type' => SettingKyeTypeEnum::STRING],
+            ['key' => 'company_address', 'value' => '', 'type' => SettingKyeTypeEnum::STRING],
         ]);
     }
 }

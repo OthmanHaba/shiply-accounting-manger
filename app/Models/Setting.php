@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Enums\SettingTypes;
+use App\Enums\SettingKyeTypeEnum;
 use Illuminate\Database\Eloquent\Model;
 
 class Setting extends Model
@@ -14,7 +14,7 @@ class Setting extends Model
     protected function casts(): array
     {
         return [
-            'type' => SettingTypes::class,
+            'type' => SettingKyeTypeEnum::class,
         ];
     }
 }
