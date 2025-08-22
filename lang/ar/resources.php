@@ -236,6 +236,7 @@ return [
             'thank_you' => 'شكراً لك',
             'generated_at' => 'تم إنشاؤه في',
             'receipt_validity' => 'هذا الإيصال صحيح ومعتمد',
+            'cut_here' => 'قص من هنا',
         ],
 
         // Validation

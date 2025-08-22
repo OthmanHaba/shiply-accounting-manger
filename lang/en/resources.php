@@ -55,6 +55,29 @@ return [
             'edit' => 'Edit Receipt',
             'delete' => 'Delete Receipt',
             'create' => 'Create Receipt',
+            'print' => 'Print Receipt',
+        ],
+
+        // Print translations
+        'print' => [
+            'title' => 'Receipt',
+            'print_button' => 'Print',
+            'receipt_title' => 'RECEIPT',
+            'company_phone' => 'Phone',
+            'company_address' => 'Address',
+            'receipt_number' => 'Receipt No',
+            'date' => 'Date',
+            'type' => 'Type',
+            'customer_name' => 'Customer Name',
+            'customer_code' => 'Customer Code',
+            'customer_phone' => 'Phone',
+            'treasure' => 'Treasure',
+            'amount' => 'Amount',
+            'notes' => 'Notes',
+            'related_invoices' => 'Related Invoices',
+            'thank_you' => 'Thank you!',
+            'generated_at' => 'Generated at',
+            'cut_here' => 'Cut Here',
         ],
 
         // Messages
