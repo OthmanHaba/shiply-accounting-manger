@@ -1,0 +1,14 @@
+name: Auto Deploy to Dokploy
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Trigger Dokploy Deployment
+      run: |
+        curl -X POST https://othmanhaba.ly/api/deploy/jFCxQEQ5Exi8V2Hw_kEER
