@@ -17,8 +17,7 @@ return [
     'tenant_model' => null,
 
     'auth_provider_model' => [
-        //        'fqcn' => 'App\\Models\\User',
-        'fqcn' => \App\Models\User::class,
+        'fqcn' => 'App\\Models\\User',
     ],
 
     'super_admin' => [
@@ -39,14 +38,14 @@ return [
             'view_any',
             'create',
             'update',
-            'restore',
-            'restore_any',
-            'replicate',
-            'reorder',
-            'delete',
-            'delete_any',
-            'force_delete',
-            'force_delete_any',
+            //            'restore',
+            //            'restore_any',
+            //            'replicate',
+            //            'reorder',
+            //            'delete',
+            //            'delete_any',
+            //            'force_delete',
+            //            'force_delete_any',
         ],
 
         'page' => 'page',
@@ -77,13 +76,15 @@ return [
             'AccountWidget', 'FilamentInfoWidget',
         ],
 
-        'resources' => [],
+        'resources' => [
+            'ActivityLogResource',
+        ],
     ],
 
     'discovery' => [
-        'discover_all_resources' => false,
-        'discover_all_widgets' => false,
-        'discover_all_pages' => false,
+        'discover_all_resources' => true,
+        'discover_all_widgets' => true,
+        'discover_all_pages' => true,
     ],
 
     'register_role_policy' => [

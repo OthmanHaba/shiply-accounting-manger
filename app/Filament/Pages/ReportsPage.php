@@ -33,6 +33,11 @@ class ReportsPage extends Page
         return __('resources.reports.title');
     }
 
+    public static function canAccess(): bool
+    {
+        return auth()->user()->can('view'.class_basename(self::class));
+    }
+
     protected function getHeaderActions(): array
     {
         return [

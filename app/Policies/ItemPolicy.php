@@ -47,7 +47,7 @@ class ItemPolicy
      */
     public function delete(User $user, Item $item): bool
     {
-        return $user->can('delete_item');
+        return $user->can('{{ Delete }}');
     }
 
     /**
@@ -55,7 +55,7 @@ class ItemPolicy
      */
     public function deleteAny(User $user): bool
     {
-        return $user->can('delete_any_item');
+        return $user->can('{{ DeleteAny }}');
     }
 
     /**
@@ -63,7 +63,7 @@ class ItemPolicy
      */
     public function forceDelete(User $user, Item $item): bool
     {
-        return $user->can('force_delete_item');
+        return $user->can('{{ ForceDelete }}');
     }
 
     /**
@@ -71,7 +71,7 @@ class ItemPolicy
      */
     public function forceDeleteAny(User $user): bool
     {
-        return $user->can('force_delete_any_item');
+        return $user->can('{{ ForceDeleteAny }}');
     }
 
     /**
@@ -79,7 +79,7 @@ class ItemPolicy
      */
     public function restore(User $user, Item $item): bool
     {
-        return $user->can('restore_item');
+        return $user->can('{{ Restore }}');
     }
 
     /**
@@ -87,7 +87,7 @@ class ItemPolicy
      */
     public function restoreAny(User $user): bool
     {
-        return $user->can('restore_any_item');
+        return $user->can('{{ RestoreAny }}');
     }
 
     /**
@@ -95,7 +95,7 @@ class ItemPolicy
      */
     public function replicate(User $user, Item $item): bool
     {
-        return $user->can('replicate_item');
+        return $user->can('{{ Replicate }}');
     }
 
     /**
@@ -103,6 +103,6 @@ class ItemPolicy
      */
     public function reorder(User $user): bool
     {
-        return $user->can('reorder_item');
+        return $user->can('{{ Reorder }}');
     }
 }

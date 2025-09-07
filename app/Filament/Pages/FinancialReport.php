@@ -35,6 +35,11 @@ class FinancialReport extends Page
 
     public ?string $end_date = null;
 
+    public static function canAccess(): bool
+    {
+        return auth()->user()->can('view'.class_basename(self::class));
+    }
+
     public function form(Form $form): Form
     {
         return $form

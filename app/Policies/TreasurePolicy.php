@@ -47,7 +47,7 @@ class TreasurePolicy
      */
     public function delete(User $user, Treasure $treasure): bool
     {
-        return $user->can('delete_treasure');
+        return $user->can('{{ Delete }}');
     }
 
     /**
@@ -55,7 +55,7 @@ class TreasurePolicy
      */
     public function deleteAny(User $user): bool
     {
-        return $user->can('delete_any_treasure');
+        return $user->can('{{ DeleteAny }}');
     }
 
     /**
@@ -63,7 +63,7 @@ class TreasurePolicy
      */
     public function forceDelete(User $user, Treasure $treasure): bool
     {
-        return $user->can('force_delete_treasure');
+        return $user->can('{{ ForceDelete }}');
     }
 
     /**
@@ -71,7 +71,7 @@ class TreasurePolicy
      */
     public function forceDeleteAny(User $user): bool
     {
-        return $user->can('force_delete_any_treasure');
+        return $user->can('{{ ForceDeleteAny }}');
     }
 
     /**
@@ -79,7 +79,7 @@ class TreasurePolicy
      */
     public function restore(User $user, Treasure $treasure): bool
     {
-        return $user->can('restore_treasure');
+        return $user->can('{{ Restore }}');
     }
 
     /**
@@ -87,7 +87,7 @@ class TreasurePolicy
      */
     public function restoreAny(User $user): bool
     {
-        return $user->can('restore_any_treasure');
+        return $user->can('{{ RestoreAny }}');
     }
 
     /**
@@ -95,7 +95,7 @@ class TreasurePolicy
      */
     public function replicate(User $user, Treasure $treasure): bool
     {
-        return $user->can('replicate_treasure');
+        return $user->can('{{ Replicate }}');
     }
 
     /**
@@ -103,6 +103,6 @@ class TreasurePolicy
      */
     public function reorder(User $user): bool
     {
-        return $user->can('reorder_treasure');
+        return $user->can('{{ Reorder }}');
     }
 }

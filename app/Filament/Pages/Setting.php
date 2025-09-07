@@ -29,6 +29,11 @@ class Setting extends Page
 
     protected static string $view = 'filament.pages.setting';
 
+    public static function canAccess(): bool
+    {
+        return auth()->user()->can('view'.class_basename(self::class));
+    }
+
     public function mount(): void
     {
         $values = [];

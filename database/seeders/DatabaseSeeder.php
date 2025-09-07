@@ -30,5 +30,7 @@ class DatabaseSeeder extends Seeder
             ['key' => 'company_phone', 'value' => '', 'type' => SettingKyeTypeEnum::STRING],
             ['key' => 'company_address', 'value' => '', 'type' => SettingKyeTypeEnum::STRING],
         ]);
+
+        $this->call(ShieldSeeder::class);
     }
 }

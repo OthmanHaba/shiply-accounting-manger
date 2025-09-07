@@ -517,11 +517,6 @@ class InvoiceResource extends Resource
         return $count > 50 ? 'success' : ($count > 20 ? 'warning' : 'primary');
     }
 
-    public static function canAccess(): bool
-    {
-        return true;
-    }
-
     public static function calculateItemPrice(Set $set, Get $get): void
     {
         // Check if price is manually edited

@@ -23,6 +23,11 @@ class ActivityLogResource extends Resource
 {
     protected static ?string $model = Activity::class;
 
+    public static function canAccess(): bool
+    {
+        return auth()->user()->hasRole('super_admin');
+    }
+
     protected static ?string $navigationIcon = 'heroicon-o-shield-check';
 
     protected static ?string $navigationGroup = 'الاعدادات';

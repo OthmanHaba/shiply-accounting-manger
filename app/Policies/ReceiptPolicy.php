@@ -47,7 +47,7 @@ class ReceiptPolicy
      */
     public function delete(User $user, Receipt $receipt): bool
     {
-        return $user->can('delete_receipt');
+        return $user->can('{{ Delete }}');
     }
 
     /**
@@ -55,7 +55,7 @@ class ReceiptPolicy
      */
     public function deleteAny(User $user): bool
     {
-        return $user->can('delete_any_receipt');
+        return $user->can('{{ DeleteAny }}');
     }
 
     /**
@@ -63,7 +63,7 @@ class ReceiptPolicy
      */
     public function forceDelete(User $user, Receipt $receipt): bool
     {
-        return $user->can('force_delete_receipt');
+        return $user->can('{{ ForceDelete }}');
     }
 
     /**
@@ -71,7 +71,7 @@ class ReceiptPolicy
      */
     public function forceDeleteAny(User $user): bool
     {
-        return $user->can('force_delete_any_receipt');
+        return $user->can('{{ ForceDeleteAny }}');
     }
 
     /**
@@ -79,7 +79,7 @@ class ReceiptPolicy
      */
     public function restore(User $user, Receipt $receipt): bool
     {
-        return $user->can('restore_receipt');
+        return $user->can('{{ Restore }}');
     }
 
     /**
@@ -87,7 +87,7 @@ class ReceiptPolicy
      */
     public function restoreAny(User $user): bool
     {
-        return $user->can('restore_any_receipt');
+        return $user->can('{{ RestoreAny }}');
     }
 
     /**
@@ -95,7 +95,7 @@ class ReceiptPolicy
      */
     public function replicate(User $user, Receipt $receipt): bool
     {
-        return $user->can('replicate_receipt');
+        return $user->can('{{ Replicate }}');
     }
 
     /**
@@ -103,6 +103,6 @@ class ReceiptPolicy
      */
     public function reorder(User $user): bool
     {
-        return $user->can('reorder_receipt');
+        return $user->can('{{ Reorder }}');
     }
 }
