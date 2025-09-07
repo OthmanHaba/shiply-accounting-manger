@@ -39,7 +39,9 @@ RUN docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql && \
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 
-COPY docker/nginx/default.conf /etc/nginx/http.d/default.conf
+COPY docker/nginx/default.conf /etc/nginx/sites-available/default
+RUN rm -f /etc/nginx/sites-enabled/default && rm -f /var/www/html/index.nginx-debian.html
+RUN ln -sf /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
 COPY docker/nginx/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 COPY docker/php/custom.ini /usr/local/etc/php/conf.d/custom.ini
