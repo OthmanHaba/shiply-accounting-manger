@@ -6,6 +6,7 @@ WORKDIR /var/www/html
 # Install dependencies
 RUN apt-get update && apt-get install -y \
     build-essential \
+    supervisor \
     libpng-dev \
     libjpeg62-turbo-dev \
     libfreetype6-dev \
@@ -37,7 +38,13 @@ RUN docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql && \
 # Install composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-# Copy application files
+
+COPY docker/nginx/default.conf /etc/nginx/http.d/default.conf
+COPY docker/nginx/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
+COPY docker/php/custom.ini /usr/local/etc/php/conf.d/custom.ini
+
+
 COPY . /var/www/html
 
 # Set permissions
@@ -59,5 +66,4 @@ RUN php artisan config:cache
 RUN php artisan route:cache
 RUN php artisan view:cache
 
-
-CMD ["php-fpm" , "nginx -g daemon off;"]
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]

@@ -8,9 +8,7 @@ services:
         restart: unless-stopped
         working_dir: /var/www
         ports:
-            - "80"
-        volumes:
-            - ./:/var/www
+            - "9090:80"
         networks:
             - app-network
 
