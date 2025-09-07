@@ -137,7 +137,9 @@ class CustomerResource extends Resource
                             'default' => 'full',
                             'lg' => 1,
                         ])
-                        ->hiddenOn('edit'),
+                        ->hiddenOn([
+                            'edit', 'view',
+                        ]),
                 ])
                     ->from('lg')
                     ->columnSpanFull(),
