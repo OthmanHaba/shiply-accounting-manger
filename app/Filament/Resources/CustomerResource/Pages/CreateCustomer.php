@@ -25,7 +25,7 @@ class CreateCustomer extends CreateRecord
                 unset($data[$key]);
             }
         }
-        
+
         return $data;
     }
 
@@ -33,14 +33,14 @@ class CreateCustomer extends CreateRecord
     {
         $currencies = Currency::all();
         $debtCreated = false;
-        
+
         foreach ($currencies as $currency) {
-            $debtAmount = $this->data['debt_amount_' . $currency->id] ?? 0;
-            
+            $debtAmount = $this->data['debt_amount_'.$currency->id] ?? 0;
+
             // Create debt account if amount > 0
             if ($debtAmount > 0) {
                 $this->getRecord()->accounts()->create([
-                    'code' => 'DEBT_' . strtoupper(uniqid()),
+                    'code' => 'DEBT_'.strtoupper(uniqid()),
                     'amount' => -$debtAmount, // Negative amount for debt
                     'currency_id' => $currency->id,
                 ]);
@@ -52,13 +52,13 @@ class CreateCustomer extends CreateRecord
     protected function getCreatedNotification(): ?Notification
     {
         $body = 'The customer has been created and accounts have been set up for all currencies.';
-        
+
         // Check if any debt was created
         $currencies = Currency::all();
         $hasDebt = false;
-        
+
         foreach ($currencies as $currency) {
-            $debtAmount = $this->data['debt_amount_' . $currency->id] ?? 0;
+            $debtAmount = $this->data['debt_amount_'.$currency->id] ?? 0;
             if ($debtAmount > 0) {
                 $hasDebt = true;
                 break;
