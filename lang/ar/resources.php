@@ -532,4 +532,60 @@ return [
         ],
     ],
 
+    'financial_report_page' => [
+        'title' => 'التقارير المالية',
+        'navigation_label' => 'التقارير المالية',
+
+        'form' => [
+            'report_type' => 'نوع التقرير',
+            'daily' => 'تقرير يومي',
+            'weekly' => 'تقرير أسبوعي',
+            'yearly' => 'تقرير سنوي',
+            'custom' => 'فترة زمنية مخصصة',
+            'start_date' => 'تاريخ البداية',
+            'end_date' => 'تاريخ النهاية',
+        ],
+
+        'daily' => [
+            'title' => 'تقرير الدخل اليومي',
+            'date' => 'التاريخ',
+            'total_income' => 'إجمالي الدخل',
+            'invoice_count' => 'عدد الفواتير',
+        ],
+
+        'weekly' => [
+            'title' => 'تقرير الدخل الأسبوعي',
+            'period' => 'فترة الأسبوع',
+            'total_income' => 'إجمالي الدخل',
+            'invoice_count' => 'عدد الفواتير',
+            'daily_average' => 'المتوسط اليومي',
+            'daily_breakdown' => 'التفصيل اليومي',
+            'date_column' => 'التاريخ',
+            'income_column' => 'الدخل',
+        ],
+
+        'yearly' => [
+            'title' => 'تقرير الدخل السنوي',
+            'year' => 'السنة',
+            'total_income' => 'إجمالي الدخل',
+            'invoice_count' => 'عدد الفواتير',
+            'monthly_average' => 'المتوسط الشهري',
+            'monthly_breakdown' => 'التفصيل الشهري',
+            'month_column' => 'الشهر',
+            'income_column' => 'الدخل',
+        ],
+
+        'custom' => [
+            'title' => 'تقرير فترة زمنية مخصصة',
+            'period' => 'الفترة المحددة',
+            'total_income' => 'إجمالي الدخل',
+            'invoice_count' => 'عدد الفواتير',
+            'daily_breakdown' => 'التفصيل اليومي',
+            'date_column' => 'التاريخ',
+            'income_column' => 'الدخل',
+            'no_data' => 'لا توجد بيانات متاحة للفترة المحددة',
+            'select_dates' => 'يرجى اختيار تاريخ البداية والنهاية',
+        ],
+    ],
+
 ];

@@ -19,7 +19,10 @@ RUN apt-get update && apt-get install -y \
     libzip-dev \
     libonig-dev \
     libicu-dev \
-    libpq-dev
+    libpq-dev \
+    nginx \
+    nodejs \
+    npm
 
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
@@ -45,6 +48,8 @@ COPY .env.example .env
 
 # Install dependencies
 RUN composer install
+RUN npm install
+RUN npm run build
 
 # Generate application key
 RUN php artisan key:generate
@@ -55,4 +60,4 @@ RUN php artisan route:cache
 RUN php artisan view:cache
 
 
-CMD ["php-fpm"]
+CMD ["php-fpm" , "nginx -g daemon off;"]

@@ -424,4 +424,60 @@ return [
             'not_available' => 'N/A',
         ],
     ],
+
+    'financial_report_page' => [
+        'title' => 'Financial Reports',
+        'navigation_label' => 'Financial Reports',
+
+        'form' => [
+            'report_type' => 'Report Type',
+            'daily' => 'Daily Report',
+            'weekly' => 'Weekly Report',
+            'yearly' => 'Yearly Report',
+            'custom' => 'Custom Date Range',
+            'start_date' => 'Start Date',
+            'end_date' => 'End Date',
+        ],
+
+        'daily' => [
+            'title' => 'Daily Income Report',
+            'date' => 'Date',
+            'total_income' => 'Total Income',
+            'invoice_count' => 'Invoices Count',
+        ],
+
+        'weekly' => [
+            'title' => 'Weekly Income Report',
+            'period' => 'Week Period',
+            'total_income' => 'Total Income',
+            'invoice_count' => 'Invoices Count',
+            'daily_average' => 'Daily Average',
+            'daily_breakdown' => 'Daily Breakdown',
+            'date_column' => 'Date',
+            'income_column' => 'Income',
+        ],
+
+        'yearly' => [
+            'title' => 'Yearly Income Report',
+            'year' => 'Year',
+            'total_income' => 'Total Income',
+            'invoice_count' => 'Invoices Count',
+            'monthly_average' => 'Monthly Average',
+            'monthly_breakdown' => 'Monthly Breakdown',
+            'month_column' => 'Month',
+            'income_column' => 'Income',
+        ],
+
+        'custom' => [
+            'title' => 'Custom Date Range Report',
+            'period' => 'Selected Period',
+            'total_income' => 'Total Income',
+            'invoice_count' => 'Invoices Count',
+            'daily_breakdown' => 'Daily Breakdown',
+            'date_column' => 'Date',
+            'income_column' => 'Income',
+            'no_data' => 'No data available for the selected period',
+            'select_dates' => 'Please select start and end dates',
+        ],
+    ],
 ];

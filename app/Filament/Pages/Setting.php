@@ -21,6 +21,8 @@ class Setting extends Page
 
     public array $data = [];
 
+    protected static ?string $navigationGroup = 'الاعدادات';
+
     protected static ?string $navigationLabel = 'الاعدادات';
 
     protected static ?string $title = 'الاعدادات';
