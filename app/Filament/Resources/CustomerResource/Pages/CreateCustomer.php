@@ -5,6 +5,7 @@ namespace App\Filament\Resources\CustomerResource\Pages;
 use App\Filament\Resources\CustomerResource;
 use App\Models\Account;
 use App\Models\Currency;
+use App\Models\Customer;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\CreateRecord;
 
@@ -39,11 +40,21 @@ class CreateCustomer extends CreateRecord
 
             // Create debt account if amount > 0
             if ($debtAmount > 0) {
-                $this->getRecord()->accounts()->create([
-                    'code' => 'DEBT_'.strtoupper(uniqid()),
-                    'amount' => -$debtAmount, // Negative amount for debt
-                    'currency_id' => $currency->id,
-                ]);
+                /**
+                 * @var Customer $customer
+                 */
+                $customer = $this->getRecord();
+
+                $customer->accounts()->where('code', strtoupper($customer->code.'-'.$currency->code))
+                    ->where('currency_id', $currency->id)
+                    ->first()->withdraw($debtAmount);
+
+                //                $this->getRecord()->accounts()->create([
+                //                    'code' => 'DEBT_'.strtoupper(uniqid()),
+                //                    'amount' => -$debtAmount, // Negative amount for debt
+                //                    'currency_id' => $currency->id,
+                //                ]);
+
                 $debtCreated = true;
             }
         }
