@@ -107,6 +107,37 @@ class CustomerResource extends Resource
                             'default' => 'full',
                             'lg' => 2,
                         ]),
+
+                    Section::make(__('resources.customer_resource.debt_section.title'))
+                        ->description(__('resources.customer_resource.debt_section.description'))
+                        ->icon('heroicon-o-banknotes')
+                        ->schema([
+                            Grid::make([
+                                'default' => 1,
+                                'md' => 2,
+                                'lg' => 3,
+                            ])
+                                ->schema(
+                                    Currency::all()->map(function ($currency) {
+                                        return TextInput::make('debt_amount_'.$currency->id)
+                                            ->label(__('resources.customer_resource.fields.debt_amount').' ('.$currency->code.')')
+                                            ->placeholder('0.00')
+                                            ->prefixIcon('heroicon-o-banknotes')
+                                            ->prefixIconColor('danger')
+                                            ->numeric()
+                                            ->default(0)
+                                            ->minValue(0)
+                                            ->step(0.01)
+                                            ->suffix($currency->code)
+                                            ->columnSpan(1);
+                                    })->toArray()
+                                ),
+                        ])
+                        ->columnSpan([
+                            'default' => 'full',
+                            'lg' => 1,
+                        ])
+                        ->hiddenOn('edit'),
                 ])
                     ->from('lg')
                     ->columnSpanFull(),

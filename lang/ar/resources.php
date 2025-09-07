@@ -347,6 +347,11 @@ return [
             'description' => 'تفاصيل العميل الأساسية ومعلومات الاتصال',
         ],
 
+        'debt_section' => [
+            'title' => 'مديونية العميل',
+            'description' => 'إضافة دين أولي للعميل عند الإنشاء',
+        ],
+
         // Form Fields
         'fields' => [
             'name' => 'الاسم الكامل',
@@ -355,6 +360,10 @@ return [
             'code_placeholder' => 'مثال: CUST-001',
             'phone' => 'رقم الهاتف',
             'phone_placeholder' => 'مثال: +966 50 123 4567',
+            'debt_amount' => 'مبلغ الدين',
+            'debt_amount_placeholder' => 'أدخل مبلغ الدين الأولي',
+            'debt_currency' => 'عملة الدين',
+            'debt_currency_placeholder' => 'اختر عملة الدين',
         ],
 
         // Table Columns

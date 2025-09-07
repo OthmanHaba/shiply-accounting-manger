@@ -316,6 +316,11 @@ return [
             'description' => 'Basic customer details and contact information',
         ],
 
+        'debt_section' => [
+            'title' => 'Customer Debt',
+            'description' => 'Add initial debt for the customer when creating',
+        ],
+
         // Form Fields
         'fields' => [
             'name' => 'Full Name',
@@ -324,6 +329,10 @@ return [
             'code_placeholder' => 'e.g. CUST-001',
             'phone' => 'Phone Number',
             'phone_placeholder' => 'e.g. +1 (555) 123-4567',
+            'debt_amount' => 'Debt Amount',
+            'debt_amount_placeholder' => 'Enter initial debt amount',
+            'debt_currency' => 'Debt Currency',
+            'debt_currency_placeholder' => 'Select debt currency',
         ],
 
         // Table Columns
