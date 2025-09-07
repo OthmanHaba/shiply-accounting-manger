@@ -25,7 +25,10 @@ class ActivityLogResource extends Resource
 
     public static function canAccess(): bool
     {
-        return auth()->user()->hasRole('super_admin');
+        $user = auth()->user();
+
+        // Only super-admin has access to activity logs
+        return $user->hasRole('super_admin');
     }
 
     protected static ?string $navigationIcon = 'heroicon-o-shield-check';

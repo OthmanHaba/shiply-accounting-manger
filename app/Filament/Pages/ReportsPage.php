@@ -35,7 +35,14 @@ class ReportsPage extends Page
 
     public static function canAccess(): bool
     {
-        return auth()->user()->can('view'.class_basename(self::class));
+        $user = auth()->user();
+
+        // Super-admin has access to everything
+        if ($user->hasRole('super_admin')) {
+            return true;
+        }
+
+        return $user->can('view'.class_basename(self::class));
     }
 
     protected function getHeaderActions(): array
