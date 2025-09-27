@@ -319,6 +319,15 @@
                     <span>-{{ number_format($invoice->discount, 2) }}</span>
                 </div>
             @endif
+
+            <div class="total-row">
+                <div>
+                    اجمالي الديون
+                </div>
+                @foreach($invoice->customer->totalDebit() as $dipit )
+                    {{$dipit}} <br>
+                @endforeach
+            </div>
         </div>
     </div>
 

@@ -49,4 +49,9 @@ class Customer extends Model
             default => "تم {$eventName} العميل",
         };
     }
+
+    public function totalDebit()
+    {
+        return $this->accounts->where('amount', '<', 0)->map(fn (Account $account) => $account->amount.$account->currency->code);
+    }
 }

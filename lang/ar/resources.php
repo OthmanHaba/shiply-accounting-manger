@@ -99,6 +99,7 @@ return [
 
         // Print Template
         'print' => [
+            'invoice_info' => 'معلومات الفاتورة',
             'title' => 'فاتورة',
             'print_button' => 'طباعة',
             'invoice_title' => 'فاتورة',
