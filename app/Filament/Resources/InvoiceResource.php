@@ -241,7 +241,7 @@ class InvoiceResource extends Resource
                                             ->required()
                                             ->prefixIcon('heroicon-o-squares-2x2')
                                             ->prefixIconColor('info')
-                                            ->columnSpan(1),
+                                            ->c olumnSpan(1),
 
                                         TextInput::make('item_count')
                                             ->label(__('resources.invoice_resource.fields.item_count'))
@@ -519,17 +519,14 @@ class InvoiceResource extends Resource
 
     public static function calculateItemPrice(Set $set, Get $get): void
     {
-        // Check if price is manually edited
         $isManuallyEdited = $get('manual_edit_price');
 
-        // Only calculate if not manually edited
         if (! $isManuallyEdited) {
             $unitPrice = $get('unit_price');
             $weight = $get('weight');
-            $itemCount = $get('item_count');
 
             if (! empty($unitPrice) && ! empty($weight) && ! empty($itemCount)) {
-                $set('total_price', $unitPrice * $weight * $itemCount);
+                $set('total_price', $unitPrice * $weight);
             }
         }
     }
