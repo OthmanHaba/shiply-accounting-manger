@@ -241,7 +241,7 @@ class InvoiceResource extends Resource
                                             ->required()
                                             ->prefixIcon('heroicon-o-squares-2x2')
                                             ->prefixIconColor('info')
-                                            ->c olumnSpan(1),
+                                            ->columnSpan(1),
 
                                         TextInput::make('item_count')
                                             ->label(__('resources.invoice_resource.fields.item_count'))
