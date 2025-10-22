@@ -525,7 +525,7 @@ class InvoiceResource extends Resource
             $unitPrice = $get('unit_price');
             $weight = $get('weight');
 
-            if (! empty($unitPrice) && ! empty($weight) && ! empty($itemCount)) {
+            if (! empty($unitPrice) && ! empty($weight)) {
                 $set('total_price', $unitPrice * $weight);
             }
         }

@@ -38,9 +38,10 @@ class CreateInvoice extends CreateRecord
             'note' => $data['notes'],
         ]);
 
-        // Create invoice items
         if (isset($data['items']) && count($data['items']) > 0) {
+
             foreach ($data['items'] as $itemData) {
+
                 $invoice->items()->create([
                     'item_id' => $itemData['item_id'],
                     'item_type' => $itemData['item_type'],
